@@ -1,0 +1,22 @@
+{
+  "name": "Hukuk Pro iPhone",
+  "short_name": "Hukuk Pro",
+  "description": "Dilekçe yazma, karar taslağı ve hukuk hesaplama aracı.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0c1f3f",
+  "theme_color": "#0c1f3f",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "resources/icon_128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "resources/icon_256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ]
+}

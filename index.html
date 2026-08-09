@@ -1,532 +1,724 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Dilekçe Yaz" />
-  <link rel="apple-touch-icon" href="icon.png" />
-  <title>Dilekçe Yazma Programı</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hukuk Pro</title>
+<meta name="theme-color" content="#0c1f3f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Hukuk Pro">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="resources/icon_256.png">
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Source+Sans+3:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0c1f3f;--navy2:#1a3560;
+  --gold:#c9a84c;--gold-lt:#f0d888;
+  --cream:#faf8f2;--parch:#f5f0e0;
+  --green:#1e5c3a;--red:#7a1a1a;--blue:#1a3a8a;
+  --border:#d4c5a0;--text:#1a1a2e;--muted:#6b6070;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--text)}
+#titlebar{
+  height:36px;background:var(--navy);border-bottom:1px solid rgba(201,168,76,.2);
+  display:flex;align-items:center;gap:10px;padding:0 16px;
+  -webkit-app-region:drag;flex-shrink:0;
+}
+#titlebar .ico{font-size:16px;-webkit-app-region:no-drag}
+#titlebar .ttl{font-family:'IM Fell English',serif;color:var(--gold-lt);font-size:12px;letter-spacing:1px}
+#titlebar .sp{flex:1}
+#app{display:flex;height:calc(100vh - 62px)}
+/* SIDEBAR */
+#sidebar{
+  width:210px;flex-shrink:0;
+  background:linear-gradient(180deg,var(--navy2),var(--navy));
+  border-right:1px solid rgba(201,168,76,.2);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.sb-brand{padding:16px 14px 10px;text-align:center;border-bottom:1px solid rgba(201,168,76,.15)}
+.sb-brand .ico{font-size:28px;margin-bottom:4px}
+.sb-brand h2{font-family:'IM Fell English',serif;color:var(--gold-lt);font-size:13px;letter-spacing:1px}
+.sb-brand small{color:rgba(255,255,255,.35);font-size:9px}
+.sb-nav{flex:1;padding:8px 0;overflow-y:auto}
+.sb-sec{padding:5px 12px 2px;font-size:9px;font-weight:800;letter-spacing:1.2px;color:rgba(255,255,255,.3);text-transform:uppercase}
+.sb-item{
+  display:flex;align-items:center;gap:9px;padding:8px 14px;cursor:pointer;
+  color:rgba(255,255,255,.55);font-size:11px;font-weight:600;
+  border-left:3px solid transparent;transition:all .2s;white-space:nowrap;
+}
+.sb-item:hover{color:#fff;background:rgba(255,255,255,.06)}
+.sb-item.active{color:var(--gold-lt);background:rgba(201,168,76,.1);border-left-color:var(--gold)}
+.sb-item .ico{font-size:14px;flex-shrink:0}
+.sb-footer{padding:10px;border-top:1px solid rgba(255,255,255,.08)}
+.sb-footer-btn{display:flex;align-items:center;gap:7px;padding:6px 8px;cursor:pointer;color:rgba(255,255,255,.35);font-size:10px;border-radius:3px;transition:all .2s}
+.sb-footer-btn:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.65)}
+/* CONTENT */
+#content{flex:1;overflow:hidden;display:flex;flex-direction:column;background:var(--cream)}
+.page{display:none;flex:1;flex-direction:column;overflow:hidden}
+.page.active{display:flex}
+/* PAGE HEADER */
+.pg-hd{
+  background:var(--navy);color:white;padding:12px 22px;
+  display:flex;align-items:center;gap:12px;flex-shrink:0;
+  border-bottom:2px solid var(--gold);
+}
+.pg-hd .pg-ico{font-size:22px}
+.pg-hd h1{font-family:'IM Fell English',serif;font-size:17px;color:var(--gold-lt)}
+.pg-hd p{font-size:10px;color:rgba(255,255,255,.45);margin-top:1px}
+.pg-hd .pg-acts{margin-left:auto;display:flex;gap:7px}
+.pg-btn{padding:5px 13px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;border-radius:3px;cursor:pointer;font-size:10px;font-weight:700;transition:all .2s}
+.pg-btn:hover{background:rgba(255,255,255,.2)}
+.pg-btn.gold{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+.pg-btn.gold:hover{background:var(--gold-lt)}
+.pg-body{flex:1;overflow-y:auto;padding:18px 22px}
+/* STATUS BAR */
+#statusbar{
+  height:24px;background:var(--navy);border-top:1px solid rgba(201,168,76,.1);
+  display:flex;align-items:center;padding:0 14px;gap:18px;flex-shrink:0;
+}
+.sb-chip{font-size:9px;color:rgba(255,255,255,.35);display:flex;align-items:center;gap:3px}
+.sb-chip .dot{width:5px;height:5px;border-radius:50%;background:var(--gold)}
+/* DASHBOARD */
+.dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+.dash-card{
+  background:#fff;border:1px solid var(--border);border-radius:7px;
+  padding:18px;cursor:pointer;transition:all .25s;
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+}
+.dash-card:hover{border-color:var(--gold);box-shadow:0 4px 20px rgba(12,31,63,.12);transform:translateY(-2px)}
+.dash-card .d-ico{font-size:32px;margin-bottom:8px}
+.dash-card h3{font-size:12px;font-weight:800;color:var(--navy);margin-bottom:3px}
+.dash-card p{font-size:10px;color:var(--muted);line-height:1.4}
+.dash-card .d-cnt{margin-top:8px;padding:2px 9px;background:var(--navy);color:var(--gold-lt);border-radius:9px;font-size:9px;font-weight:700}
+.dash-recent{background:#fff;border:1px solid var(--border);border-radius:7px;padding:14px}
+.dr-ttl{font-size:11px;font-weight:800;color:var(--navy);margin-bottom:10px;padding-bottom:5px;border-bottom:1px solid var(--border)}
+/* DİLEKÇE */
+.dl-layout{display:grid;grid-template-columns:190px 1fr 240px;height:100%;overflow:hidden}
+.dl-sablon{background:var(--parch);border-right:1px solid var(--border);overflow-y:auto;padding:9px}
+.dl-sablon h3{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin:7px 0 3px;padding-bottom:2px;border-bottom:1px solid var(--border)}
+.sitem,.sablon-item{padding:4px 6px;border-radius:3px;cursor:pointer;font-size:9px;color:var(--text);transition:all .2s;border-left:2px solid transparent;margin-bottom:1px}
+.sitem:hover,.sablon-item:hover{background:#e8f0fe;border-left-color:var(--navy)}
+.sitem.active,.sablon-item.active{background:var(--navy);color:#fff;font-weight:700}
+.dl-editor{flex:1;display:flex;flex-direction:column;padding:9px;overflow:hidden}
+.dl-toolbar{display:flex;gap:5px;padding-bottom:7px;border-bottom:1px solid var(--border);margin-bottom:7px;flex-wrap:wrap}
+.tb-btn{padding:3px 9px;background:var(--parch);border:1px solid var(--border);border-radius:2px;cursor:pointer;font-size:9px;font-weight:600;color:var(--navy);transition:all .2s}
+.tb-btn:hover{background:var(--navy);color:#fff}
+#dilekce-text{
+  flex:1;width:100%;padding:12px;
+  border:1px solid var(--border);border-radius:3px;
+  font-family:'Times New Roman',serif;font-size:13px;line-height:1.9;
+  resize:none;background:#fff;outline:none;
+}
+#dilekce-text:focus{border-color:var(--navy);box-shadow:0 0 0 2px rgba(12,31,63,.07)}
+.dl-info{background:var(--parch);border-left:1px solid var(--border);overflow-y:auto;padding:11px}
+.ip-sec{margin-bottom:12px;padding-bottom:9px;border-bottom:1px solid var(--border)}
+.ip-sec h4{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:5px}
+.ip-stat{display:flex;justify-content:space-between;font-size:10px;padding:2px 0;border-bottom:1px dotted var(--border)}
+.ip-stat:last-child{border-bottom:none}
+.ip-btn{width:100%;padding:6px;background:var(--navy);color:var(--gold-lt);border:none;border-radius:3px;cursor:pointer;font-size:10px;font-weight:800;margin-bottom:3px;transition:all .2s}
+.ip-btn:hover{background:var(--navy2)}
+.ip-btn.sec{background:transparent;border:1px solid var(--border);color:var(--text)}
+.ip-btn.sec:hover{background:var(--border)}
+/* HÂKİM KARAR */
+.hk-layout{display:grid;grid-template-columns:370px 1fr;height:100%;overflow:hidden}
+.hk-form{border-right:1px solid var(--border);overflow-y:auto;background:#fff;padding:13px}
+.hk-preview{overflow-y:auto;background:var(--parch);padding:15px}
+.karar-kag{
+  max-width:790px;margin:0 auto;background:#fff;
+  border:1px solid var(--border);border-radius:4px;
+  box-shadow:0 4px 20px rgba(12,31,63,.1);
+  padding:34px 42px;
+  font-family:'Times New Roman',serif;font-size:12.5px;line-height:1.9;
+}
+.form-grp{margin-bottom:9px}
+.form-grp label{display:block;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin-bottom:2px}
+.form-grp input,.form-grp select,.form-grp textarea{
+  width:100%;padding:6px 7px;border:1px solid var(--border);border-radius:3px;
+  font-size:11px;font-family:inherit;background:var(--cream);transition:all .2s;
+}
+.form-grp input:focus,.form-grp select:focus,.form-grp textarea:focus{outline:none;border-color:var(--navy);background:#fff}
+.form-grp textarea{resize:vertical;min-height:68px;font-family:'Times New Roman',serif;font-size:12px;line-height:1.6}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
+.fsec{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--navy);padding:7px 0 5px;border-bottom:1px solid var(--border);margin-bottom:7px;margin-top:3px}
+.hesap-blk{background:var(--parch);border:1px solid var(--border);border-radius:3px;padding:9px;margin:7px 0;font-size:10px}
+.hb-r{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px dotted var(--border)}
+.hb-r:last-child{border-bottom:none;font-weight:800;font-size:11px;padding-top:5px}
+.hb-l{color:var(--muted)}.hb-v{font-weight:700;color:var(--navy)}
+.hb-g{color:var(--green)}.hb-r2{color:var(--red)}.hb-gld{color:#8a6000}
+.yp{padding:5px 11px;border-radius:18px;font-size:9px;font-weight:800;letter-spacing:.4px;text-align:center;margin:6px 0}
+.yp-k{background:#fff3e0;color:#7b4000;border:2px solid #f0a000}
+.yp-i{background:#e3f2fd;color:#1a3a8a;border:2px solid #1a3a8a}
+.yp-t{background:#fce8e8;color:#7a1a1a;border:2px solid #7a1a1a}
+.ftabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:9px}
+.ftab{flex:1;padding:6px;background:none;border:none;cursor:pointer;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.3px;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s}
+.ftab.active{color:var(--navy);border-bottom-color:var(--gold)}
+.ftab-pane{display:none}.ftab-pane.active{display:block}
+/* Karar kağıdı stilleri */
+.kk-tc{text-align:center;font-weight:bold;font-size:14px;letter-spacing:4px;margin-bottom:3px}
+.kk-mhk{text-align:center;font-weight:bold;font-size:13px;border-bottom:2.5px solid #000;padding-bottom:9px;margin-bottom:15px}
+.kk-bilgi{display:grid;grid-template-columns:130px 1fr;gap:2px 6px;font-size:12px;margin-bottom:11px;line-height:1.7}
+.kk-baslik{font-weight:bold;font-size:11px;text-decoration:underline;text-transform:uppercase;letter-spacing:.4px;margin:13px 0 6px}
+.kk-metin{text-align:justify;margin-bottom:6px;text-indent:20px}
+.kk-kanun{background:#f0f4ff;border-left:4px solid #1a3a8a;padding:6px 9px;font-size:11px;font-family:sans-serif;margin:7px 0;border-radius:0 3px 3px 0}
+.hukum-box{border:2.5px solid #000;border-radius:3px;padding:15px 19px;margin:14px 0;background:#fafaf7}
+.hukum-ttl{text-align:center;font-weight:bold;font-size:14px;letter-spacing:3px;border-bottom:2px solid #000;padding-bottom:8px;margin-bottom:10px}
+.hi{padding:5px 0;border-bottom:1px dotted var(--border);font-size:12px;line-height:1.7}
+.hi:last-child{border-bottom:none}
+.h-k{color:var(--green);font-weight:700}.h-r{color:var(--red);font-weight:700}
+.h-t{color:var(--blue);font-weight:700}.h-y{color:var(--green);font-weight:700}
+.imza-row{display:flex;justify-content:space-between;align-items:flex-end;margin-top:22px;padding-top:12px;border-top:1px solid var(--border)}
+.imza-blk{text-align:center;font-size:11px}
+.imza-cizgi{border-top:1px solid #000;width:120px;margin:0 auto 3px}
+/* HESAPLAMA */
+.hesap-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.hk{background:#fff;border:1px solid var(--border);border-radius:7px;overflow:hidden}
+.hk-head{background:var(--navy);color:var(--gold-lt);padding:10px 15px;font-size:11px;font-weight:800;letter-spacing:.3px;display:flex;align-items:center;gap:6px}
+.hk-body{padding:13px}
+.calc-btn{width:100%;padding:8px;background:var(--navy);color:var(--gold-lt);border:none;border-radius:3px;cursor:pointer;font-size:11px;font-weight:800;margin-top:3px;transition:all .2s}
+.calc-btn:hover{background:var(--navy2)}
+.sonuc{display:none;margin-top:9px;background:var(--parch);border:1px solid var(--border);border-radius:3px;padding:9px;font-size:10px}
+.s-r{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px dotted var(--border)}
+.s-r:last-child{border-bottom:none}
+.s-l{color:var(--muted)}.s-v{font-weight:700;color:var(--navy)}
+.s-top{color:var(--green);font-size:12px;font-weight:800}
+.uyari{font-size:9px;color:var(--muted);margin-top:5px;font-style:italic}
+/* ÜST YARGI */
+.uy-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:14px}
+.uy-kart{background:#fff;border:1px solid var(--border);border-radius:7px;overflow:hidden}
+.uy-head{padding:12px 15px;font-size:12px;font-weight:800;display:flex;align-items:center;gap:7px}
+.uy-head.ist{background:#e3f2fd;color:#1a3a8a;border-bottom:2px solid #1a3a8a}
+.uy-head.tem{background:#fce8e8;color:#7a1a1a;border-bottom:2px solid #7a1a1a}
+.uy-head.aym{background:#fff3e0;color:#7b4000;border-bottom:2px solid #f0a000}
+.uy-head.aihm{background:#e8f5e9;color:#1b5e20;border-bottom:2px solid #2e7d32}
+.uy-body{padding:11px}
+.uy-r{display:flex;gap:7px;padding:4px 0;font-size:10px;border-bottom:1px dotted var(--border)}
+.uy-r:last-child{border-bottom:none}
+.uy-l{font-weight:800;min-width:68px;color:var(--muted);font-size:9px;text-transform:uppercase;padding-top:1px}
+.sure-kart{background:#fff;border:1px solid var(--border);border-radius:7px;overflow:hidden}
+.sure-head{background:linear-gradient(135deg,var(--navy),var(--navy2));color:white;padding:11px 15px;font-size:12px;font-weight:800;display:flex;align-items:center;gap:7px}
+.sure-body{padding:15px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;align-items:end}
+.sure-sonuc{display:none;margin:0 15px 15px;background:#e3f2fd;border:1px solid #90b4e8;border-radius:4px;padding:11px;font-size:11px}
+/* ORNEKLER */
+.orn-layout{display:grid;grid-template-columns:190px 1fr;height:100%;overflow:hidden}
+.orn-liste{background:var(--parch);border-right:1px solid var(--border);overflow-y:auto;padding:9px}
+.ol-grp{margin-bottom:11px}
+.ol-grp h4{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:4px;padding-bottom:2px;border-bottom:1px solid var(--border)}
+.ol-item{padding:5px 7px;border-radius:3px;cursor:pointer;font-size:9px;color:var(--text);transition:all .2s;border-left:2px solid transparent;margin-bottom:1px;line-height:1.4}
+.ol-item:hover{background:#e8f0fe;border-left-color:var(--navy)}
+.ol-item.active{background:var(--navy);color:#fff;font-weight:700;border-left-color:var(--gold)}
+.orn-icerik{overflow-y:auto;background:var(--parch);padding:15px}
+/* KAYITLI */
+.belge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:11px}
+/* TOAST */
+.toast{
+  position:fixed;bottom:28px;right:18px;z-index:9999;
+  padding:9px 16px;border-radius:4px;font-size:12px;font-family:sans-serif;font-weight:600;
+  color:#fff;box-shadow:0 4px 16px rgba(0,0,0,.3);transition:opacity .3s;
+}
+/* PLACEHOLDER */
+.ph{color:#ccc;font-style:italic;font-family:sans-serif;font-size:12px}
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #f2f2f7;
-      color: #1c1c1e;
-      min-height: 100vh;
-    }
-
-    /* ── NAV BAR ── */
-    .navbar {
-      background: #fff;
-      border-bottom: 1px solid #e5e5ea;
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .navbar h1 { font-size: 18px; font-weight: 700; }
-    .navbar .logo { font-size: 22px; }
-
-    /* ── TABS ── */
-    .tabs {
-      display: flex;
-      background: #fff;
-      border-bottom: 1px solid #e5e5ea;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    .tabs::-webkit-scrollbar { display: none; }
-    .tab {
-      flex: 0 0 auto;
-      padding: 10px 16px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      color: #636366;
-      white-space: nowrap;
-    }
-    .tab.active {
-      color: #007aff;
-      border-bottom-color: #007aff;
-    }
-
-    /* ── SECTIONS ── */
-    .section { display: none; padding: 16px; }
-    .section.active { display: block; }
-
-    /* ── CARDS ── */
-    .card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,.08);
-    }
-    .card h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-    .card p  { font-size: 13px; color: #636366; }
-
-    /* ── FORM ── */
-    .form-group { margin-bottom: 14px; }
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: #636366;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: .4px;
-    }
-    input, textarea, select {
-      width: 100%;
-      border: 1px solid #d1d1d6;
-      border-radius: 10px;
-      padding: 12px;
-      font-size: 16px; /* 16px = iOS zoom engeli */
-      font-family: inherit;
-      background: #fff;
-      color: #1c1c1e;
-      -webkit-appearance: none;
-    }
-    input:focus, textarea:focus, select:focus {
-      outline: none;
-      border-color: #007aff;
-    }
-    textarea { min-height: 120px; resize: vertical; }
-
-    /* ── BUTTONS ── */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 13px 20px;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      width: 100%;
-      margin-bottom: 10px;
-      transition: opacity .15s;
-    }
-    .btn:active { opacity: .7; }
-    .btn-primary  { background: #007aff; color: #fff; }
-    .btn-success  { background: #34c759; color: #fff; }
-    .btn-warning  { background: #ff9500; color: #fff; }
-    .btn-danger   { background: #ff3b30; color: #fff; }
-    .btn-outline  { background: #fff; color: #007aff; border: 1.5px solid #007aff; }
-
-    /* ── TEMPLATE GRID ── */
-    .template-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-    .template-btn {
-      background: #fff;
-      border: 1.5px solid #e5e5ea;
-      border-radius: 12px;
-      padding: 14px 10px;
-      text-align: center;
-      cursor: pointer;
-      transition: border-color .15s, background .15s;
-    }
-    .template-btn:active { background: #f2f2f7; }
-    .template-btn .icon { font-size: 28px; margin-bottom: 6px; }
-    .template-btn .name { font-size: 12px; font-weight: 600; color: #1c1c1e; }
-
-    /* ── PREVIEW ── */
-    #preview-area {
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      font-family: 'Times New Roman', serif;
-      font-size: 14px;
-      line-height: 1.8;
-      white-space: pre-wrap;
-      min-height: 300px;
-      box-shadow: 0 1px 3px rgba(0,0,0,.08);
-    }
-
-    /* ── PRINT ── */
-    @media print {
-      body { background: #fff; }
-      .navbar, .tabs, .btn, .template-grid, label, .form-group { display: none !important; }
-      .section { display: block !important; padding: 0; }
-      #preview-area {
-        box-shadow: none;
-        border-radius: 0;
-        font-size: 12pt;
-        padding: 0;
-      }
-    }
-
-    /* ── TOAST ── */
-    .toast {
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: #1c1c1e;
-      color: #fff;
-      padding: 12px 24px;
-      border-radius: 20px;
-      font-size: 14px;
-      font-weight: 500;
-      z-index: 999;
-      transition: transform .3s ease;
-      pointer-events: none;
-    }
-    .toast.show { transform: translateX(-50%) translateY(0); }
-
-    /* safe area iPhone X+ */
-    .section { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
-  </style>
+/* iPhone / PWA düzeni */
+.iphone-install{
+  display:none;background:#fff7df;border-bottom:1px solid var(--border);
+  color:var(--navy);font-size:12px;padding:8px 12px;line-height:1.35;
+}
+@media (display-mode: browser) and (max-width: 900px){
+  .iphone-install{display:block}
+}
+@media (max-width: 900px){
+  html,body{height:100dvh;overflow:hidden}
+  #titlebar{height:30px;padding:0 10px}
+  #titlebar .ttl{font-size:10px}
+  #app{height:calc(100dvh - 54px);flex-direction:column}
+  #sidebar{
+    width:100%;height:auto;max-height:132px;display:block;overflow:hidden;
+    border-right:none;border-bottom:1px solid rgba(201,168,76,.25);
+  }
+  .sb-brand{display:none}
+  .sb-nav{
+    display:flex;gap:4px;overflow-x:auto;overflow-y:hidden;padding:7px 8px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .sb-sec{display:none}
+  .sb-item{
+    min-width:max-content;border-left:none;border-bottom:3px solid transparent;
+    padding:8px 10px;border-radius:6px;font-size:11px;background:rgba(255,255,255,.04);
+  }
+  .sb-item.active{border-left:none;border-bottom-color:var(--gold)}
+  .sb-footer{display:none}
+  #content{min-height:0}
+  .pg-hd{padding:10px 12px;gap:8px;align-items:flex-start}
+  .pg-hd h1{font-size:15px}
+  .pg-hd p{font-size:10px}
+  .pg-hd .pg-acts{gap:5px;flex-wrap:wrap;justify-content:flex-end}
+  .pg-btn{padding:6px 9px;font-size:10px}
+  .pg-body{padding:12px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .dash-grid,.hesap-grid,.uy-grid{grid-template-columns:1fr;gap:10px}
+  .dash-card{padding:14px}
+  .dl-layout,.hk-layout,.orn-layout{display:flex;flex-direction:column;height:auto;min-height:100%;overflow:visible}
+  .dl-sablon,.dl-info,.hk-form,.hk-preview,.orn-liste,.orn-icerik{
+    border:1px solid var(--border);border-radius:6px;margin-bottom:10px;
+    max-height:none;overflow:visible;
+  }
+  .dl-sablon{max-height:210px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .dl-editor{min-height:58dvh;padding:8px;border:1px solid var(--border);border-radius:6px;background:#fff}
+  #dilekce-text{min-height:52dvh;font-size:15px;line-height:1.75}
+  .dl-toolbar{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch}
+  .tb-btn{min-width:max-content;padding:6px 10px}
+  .dl-info{display:block}
+  .fg2,.fg3,.sure-body{grid-template-columns:1fr}
+  .karar-kag{padding:20px 16px;font-size:12px;box-shadow:none}
+  .kk-bilgi{grid-template-columns:95px 1fr}
+  .imza-row{gap:10px}
+  .imza-cizgi{width:90px}
+  .ftabs{overflow-x:auto}
+  .ftab{min-width:96px}
+  .belge-grid{grid-template-columns:1fr}
+  #statusbar{height:24px;gap:8px;padding:0 8px;overflow-x:auto}
+  .sb-chip{min-width:max-content}
+  input,select,textarea,button{font-size:16px}
+}
+</style>
 </head>
 <body>
+<div class="iphone-install">iPhone icin: Safari'de acin, Paylas tusuna basin ve <strong>Ana Ekrana Ekle</strong> secin. Belgeler bu cihazda saklanir.</div>
 
-<div class="navbar">
-  <span class="logo">⚖️</span>
-  <h1>Dilekçe Yazma Programı</h1>
-  <span style="font-size:20px">📋</span>
+<div id="titlebar">
+  <span class="ico">⚖️</span>
+  <span class="ttl">HUKUK PRO — Profesyonel Hukuk Yazılımı</span>
+  <div class="sp"></div>
 </div>
 
-<div class="tabs">
-  <div class="tab active" onclick="showTab('sablon')">Şablonlar</div>
-  <div class="tab" onclick="showTab('yaz')">Yaz</div>
-  <div class="tab" onclick="showTab('onizleme')">Önizleme</div>
-  <div class="tab" onclick="showTab('bilgi')">Bilgi</div>
-</div>
-
-<!-- ════════════════ ŞABLONLAR ════════════════ -->
-<div id="sablon" class="section active">
-  <div class="card">
-    <h3>📋 Hazır Şablonlar</h3>
-    <p>Bir şablon seçin, bilgilerinizi girin.</p>
+<div id="app">
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="sb-brand">
+    <div class="ico">⚖️</div>
+    <h2>HUKUK PRO</h2>
+    <small>v1.0.2 — 2024</small>
   </div>
-  <div class="template-grid">
-    <div class="template-btn" onclick="loadTemplate('mahkeme')">
-      <div class="icon">⚖️</div>
-      <div class="name">Mahkeme Dilekçesi</div>
-    </div>
-    <div class="template-btn" onclick="loadTemplate('ssk')">
-      <div class="icon">🏥</div>
-      <div class="name">SGK / SSK</div>
-    </div>
-    <div class="template-btn" onclick="loadTemplate('belediye')">
-      <div class="icon">🏛️</div>
-      <div class="name">Belediye</div>
-    </div>
-    <div class="template-btn" onclick="loadTemplate('mudurluk')">
-      <div class="icon">🏢</div>
-      <div class="name">Müdürlük</div>
-    </div>
-    <div class="template-btn" onclick="loadTemplate('isveren')">
-      <div class="icon">👔</div>
-      <div class="name">İşveren / Tazminat</div>
-    </div>
-    <div class="template-btn" onclick="loadTemplate('tapu')">
-      <div class="icon">🏠</div>
-      <div class="name">Tapu Müdürlüğü</div>
-    </div>
-    <div class="template-btn" onclick="loadTemplate('vergi')">
-      <div class="icon">📊</div>
-      <div class="name">Vergi Dairesi</div>
-    </div>
-    <div class="template-btn" onclick="loadTemplate('genel')">
-      <div class="icon">📄</div>
-      <div class="name">Genel Dilekçe</div>
-    </div>
+  <div class="sb-nav">
+    <div class="sb-sec">ANA</div>
+    <div class="sb-item active" id="nav-anasayfa" data-page="anasayfa"><span class="ico">🏠</span>Ana Sayfa</div>
+    <div class="sb-sec">BELGELER</div>
+    <div class="sb-item" id="nav-dilekce" data-page="dilekce"><span class="ico">📝</span>Dilekçe Yazma</div>
+    <div class="sb-item" id="nav-hakim" data-page="hakim"><span class="ico">⚖️</span>Hâkim Karar Yazım</div>
+    <div class="sb-item" id="nav-ornekler" data-page="ornekler"><span class="ico">📋</span>Karar Örnekleri</div>
+    <div class="sb-sec">ARAÇLAR</div>
+    <div class="sb-item" id="nav-hesaplama" data-page="hesaplama"><span class="ico">🧮</span>Harç & Hesaplama</div>
+    <div class="sb-item" id="nav-ustyargi" data-page="ustyargi"><span class="ico">📤</span>Üst Yargı Yolu</div>
+    <div class="sb-sec">DOSYALAR</div>
+    <div class="sb-item" id="nav-kayitli" data-page="kayitli"><span class="ico">💾</span>Kayıtlı Belgeler</div>
   </div>
-  <div class="card">
-    <h3>💡 İpucu</h3>
-    <p>Şablon seçtikten sonra "Yaz" sekmesinden bilgilerinizi doldurun.</p>
+  <div class="sb-footer">
+    <div class="sb-footer-btn" id="btn-klasor">📁 Kayıt Klasörü</div>
   </div>
 </div>
 
-<!-- ════════════════ YAZ ════════════════ -->
-<div id="yaz" class="section">
-  <div class="card">
-    <div class="form-group">
-      <label>Kurum / Makam</label>
-      <input id="kurum" type="text" placeholder="örn. İstanbul Asliye Hukuk Mahkemesi" />
-    </div>
-    <div class="form-group">
-      <label>Adınız Soyadınız</label>
-      <input id="ad" type="text" placeholder="Ad Soyad" />
-    </div>
-    <div class="form-group">
-      <label>T.C. Kimlik No</label>
-      <input id="tc" type="tel" maxlength="11" placeholder="11 haneli TC No" />
-    </div>
-    <div class="form-group">
-      <label>Adresiniz</label>
-      <textarea id="adres" rows="2" placeholder="Mahalle, Sokak, No, İlçe/İl"></textarea>
-    </div>
-    <div class="form-group">
-      <label>Telefon</label>
-      <input id="tel" type="tel" placeholder="0xxx xxx xx xx" />
-    </div>
-    <div class="form-group">
-      <label>Konu</label>
-      <input id="konu" type="text" placeholder="Dilekçenizin konusu" />
-    </div>
-    <div class="form-group">
-      <label>Dilekçe Metni</label>
-      <textarea id="metin" rows="8" placeholder="Dilekçenizin içeriğini buraya yazın..."></textarea>
-    </div>
-    <div class="form-group">
-      <label>Ekler (isteğe bağlı)</label>
-      <textarea id="ekler" rows="2" placeholder="1- Kimlik fotokopisi&#10;2- ..."></textarea>
-    </div>
-    <div class="form-group">
-      <label>Tarih</label>
-      <input id="tarih" type="date" />
-    </div>
-  </div>
+<!-- CONTENT -->
+<div id="content">
 
-  <button class="btn btn-primary" onclick="generatePreview()">👁️ Önizleme Oluştur</button>
-  <button class="btn btn-outline" onclick="clearForm()">🗑️ Formu Temizle</button>
-</div>
-
-<!-- ════════════════ ÖNİZLEME ════════════════ -->
-<div id="onizleme" class="section">
-  <div id="preview-area">Henüz dilekçe oluşturulmadı.\n\n"Yaz" sekmesinden bilgilerinizi doldurup "Önizleme Oluştur" butonuna tıklayın.</div>
-  <br/>
-  <button class="btn btn-success" onclick="printDoc()">🖨️ Yazdır / PDF Kaydet</button>
-  <button class="btn btn-warning" onclick="copyText()">📋 Metni Kopyala</button>
-  <button class="btn btn-outline"  onclick="shareDoc()">📤 Paylaş</button>
-</div>
-
-<!-- ════════════════ BİLGİ ════════════════ -->
-<div id="bilgi" class="section">
-  <div class="card">
-    <h3>ℹ️ Dilekçe Nedir?</h3>
-    <p>Dilekçe; bir kişinin bir konuda yetkili makamlara yazılı olarak yaptığı başvurudur. T.C. Anayasası'nın 74. maddesi gereğince herkes dilekçe hakkına sahiptir.</p>
+<!-- ANA SAYFA -->
+<div class="page active" id="page-anasayfa">
+  <div class="pg-hd">
+    <span class="pg-ico">🏠</span>
+    <div><h1>Ana Sayfa</h1><p>Hoş Geldiniz — Hukuk Pro v1.0.2</p></div>
+    <div class="pg-acts">
+      <button class="pg-btn gold" id="btn-yeni-dilekce-ana">+ Yeni Dilekçe</button>
+      <button class="pg-btn" id="btn-yeni-karar-ana">+ Yeni Karar</button>
+    </div>
   </div>
-  <div class="card">
-    <h3>✅ Dilekçede Bulunması Gerekenler</h3>
-    <p>• Başvurulan makam<br/>• Başvuru tarihi<br/>• Ad, soyad, adres ve imza<br/>• Konu ve açıklama<br/>• Talep / istek</p>
-  </div>
-  <div class="card">
-    <h3>📱 iPhone'da PDF Nasıl Kaydedilir?</h3>
-    <p>1. "Yazdır / PDF Kaydet" butonuna dokunun.<br/>2. Açılan menüde sol alta kaydırın.<br/>3. <b>"PDF olarak kaydet"</b> seçeneğini seçin.<br/>4. Kaydetmek istediğiniz yeri seçin.</p>
-  </div>
-  <div class="card">
-    <h3>⚠️ Yasal Uyarı</h3>
-    <p>Bu uygulama genel bilgi amaçlıdır; hukuki tavsiye niteliği taşımaz. Önemli hukuki işlemler için bir avukattan destek alınız.</p>
+  <div class="pg-body">
+    <div class="dash-grid">
+      <div class="dash-card" id="dc-dilekce"><div class="d-ico">📝</div><h3>Dilekçe Yazma</h3><p>67 şablon ile dakikalar içinde dilekçe oluşturun</p><span class="d-cnt">67 Şablon</span></div>
+      <div class="dash-card" id="dc-hakim"><div class="d-ico">⚖️</div><h3>Hâkim Karar Yazım</h3><p>28 dava türü, otomatik harç/ücret hesaplama</p><span class="d-cnt">28 Dava Türü</span></div>
+      <div class="dash-card" id="dc-ornekler"><div class="d-ico">📋</div><h3>Karar Örnekleri</h3><p>Hüküm, Taşınmaz, Nüfus, İcra karar örnekleri</p><span class="d-cnt">12 Karar</span></div>
+      <div class="dash-card" id="dc-hesaplama"><div class="d-ico">🧮</div><h3>Hesaplama</h3><p>Harç, vekâlet, inkar tazminatı, faiz — 2024</p><span class="d-cnt">2024 Tarife</span></div>
+      <div class="dash-card" id="dc-ustyargi"><div class="d-ico">📤</div><h3>Üst Yargı Yolu</h3><p>İstinaf, Temyiz, AYM, AİHM + süre hesaplayıcı</p><span class="d-cnt">4 Yol</span></div>
+      <div class="dash-card" id="dc-kayitli"><div class="d-ico">💾</div><h3>Kayıtlı Belgeler</h3><p>Oluşturduğunuz belgeleri yönetin</p><span class="d-cnt" id="belge-say">0 Belge</span></div>
+    </div>
+    <div class="dash-recent">
+      <div class="dr-ttl">⏱ Son İşlemler</div>
+      <div id="son-islemler" style="color:var(--muted);font-size:10px;padding:12px;text-align:center">Henüz kayıtlı belge yok.</div>
+    </div>
   </div>
 </div>
 
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
+<!-- DİLEKÇE YAZMA -->
+<div class="page" id="page-dilekce">
+  <div class="pg-hd">
+    <span class="pg-ico">📝</span>
+    <div><h1>Dilekçe Yazma</h1><p>67 Profesyonel Şablon Kütüphanesi</p></div>
+    <div class="pg-acts">
+      <button class="pg-btn" id="btn-dl-temizle">🗑 Temizle</button>
+      <button class="pg-btn" id="btn-dl-kaydet">💾 Kaydet</button>
+      <button class="pg-btn gold" id="btn-dl-yazdir">🖨 Yazdır</button>
+    </div>
+  </div>
+  <div style="flex:1;overflow:hidden">
+    <div class="dl-layout" style="height:100%">
+      <div class="dl-sablon">
+        <input id="sablon-ara" placeholder="🔍 Şablon ara..." style="width:100%;padding:5px 6px;border:1px solid var(--border);border-radius:3px;font-size:10px;margin-bottom:7px;background:var(--cream)">
+        <div id="sablon-listesi"></div>
+      </div>
+      <div class="dl-editor">
+        <div class="dl-toolbar">
+          <button class="tb-btn" data-ekle="DAVACI: ">Davacı</button>
+          <button class="tb-btn" data-ekle="DAVALI: ">Davalı</button>
+          <button class="tb-btn" data-ekle="MAHKEME: ">Mahkeme</button>
+          <button class="tb-btn" data-ekle="&#10;&#10;TALEP VE SONUÇ:&#10;">Talep</button>
+          <button class="tb-btn" data-ekle="&#10;&#10;KANUNİ DAYANAKLAR:&#10;">Kanuni Dayanak</button>
+          <button class="tb-btn" data-ekle="&#10;&#10;Saygılarımla,&#10;&#10;________________&#10;İmza / Tarih">İmza</button>
+        </div>
+        <textarea id="dilekce-text" placeholder="Soldan bir şablon seçin veya buraya yazın..."></textarea>
+      </div>
+      <div class="dl-info">
+        <div class="ip-sec">
+          <h4>📊 İstatistik</h4>
+          <div class="ip-stat"><span>Sözcük</span><span id="stat-kelime">0</span></div>
+          <div class="ip-stat"><span>Karakter</span><span id="stat-char">0</span></div>
+          <div class="ip-stat"><span>Cümle</span><span id="stat-cumle">0</span></div>
+          <div class="ip-stat"><span>Paragraf</span><span id="stat-para">0</span></div>
+        </div>
+        <div class="ip-sec">
+          <h4>💾 İşlemler</h4>
+          <button class="ip-btn" id="btn-dl-yazdir2">🖨 Yazdır</button>
+          <button class="ip-btn sec" id="btn-dl-kopyala">📋 Kopyala</button>
+          <button class="ip-btn sec" id="btn-dl-kaydet2">💾 Kaydet</button>
+        </div>
+        <div><h4 style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:5px">Aktif Şablon</h4><div id="aktif-sablon" style="font-size:10px;color:var(--navy);font-weight:700">Seçilmedi</div></div>
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- HÂKİM KARAR -->
+<div class="page" id="page-hakim">
+  <div class="pg-hd">
+    <span class="pg-ico">⚖️</span>
+    <div><h1>Hâkim Karar Yazım Sistemi</h1><p>28 Dava Türü — 2024 Tarife Otomatik Hesaplama</p></div>
+    <div class="pg-acts">
+      <button class="pg-btn" id="btn-hk-sifirla">🗑 Sıfırla</button>
+      <button class="pg-btn" id="btn-hk-kaydet">💾 Kaydet</button>
+      <button class="pg-btn gold" id="btn-hk-yazdir">🖨 Yazdır</button>
+    </div>
+  </div>
+  <div style="flex:1;overflow:hidden">
+    <div class="hk-layout" style="height:100%">
+      <div class="hk-form">
+        <div class="ftabs">
+          <button class="ftab active" data-ftab="0">📋 Taraflar</button>
+          <button class="ftab" data-ftab="1">⚖️ Değer</button>
+          <button class="ftab" data-ftab="2">📝 Gerekçe</button>
+        </div>
+        <div class="ftab-pane active" id="ft0">
+          <div class="fsec">🏛 Mahkeme & Dosya</div>
+          <div class="fg2">
+            <div class="form-grp"><label>Mahkeme Adı</label><input id="f-mhk" placeholder="İstanbul 1. Asliye Hukuk"></div>
+            <div class="form-grp"><label>İl / İlçe</label><input id="f-il" placeholder="Kadıköy / İstanbul"></div>
+          </div>
+          <div class="fg3">
+            <div class="form-grp"><label>Esas No</label><input id="f-esas" placeholder="2024/1234"></div>
+            <div class="form-grp"><label>Karar No</label><input id="f-kno" placeholder="2024/567"></div>
+            <div class="form-grp"><label>Karar Tarihi</label><input id="f-ktar" type="date"></div>
+          </div>
+          <div class="fg2">
+            <div class="form-grp"><label>Hâkim</label><input id="f-hakim" placeholder="Ayşe YILMAZ"></div>
+            <div class="form-grp"><label>Sicil No</label><input id="f-sicil" placeholder="45678"></div>
+          </div>
+          <div class="form-grp"><label>Kâtip</label><input id="f-katip" placeholder="Mehmet KARA"></div>
+          <div class="fsec">👤 Davacı</div>
+          <div class="form-grp"><label>Adı Soyadı / Unvanı</label><input id="f-dav-ad" placeholder="Ahmet YILMAZ"></div>
+          <div class="fg2">
+            <div class="form-grp"><label>T.C. / Vergi No</label><input id="f-dav-tc" placeholder="12345678901"></div>
+            <div class="form-grp"><label>Vekil</label><input id="f-dav-vek" placeholder="Av. Fatma DEMİR"></div>
+          </div>
+          <div class="fsec">👤 Davalı</div>
+          <div class="form-grp"><label>Adı Soyadı / Unvanı</label><input id="f-dal-ad" placeholder="Zeynep KAYA"></div>
+          <div class="fg2">
+            <div class="form-grp"><label>T.C. / Vergi No</label><input id="f-dal-tc" placeholder="98765432109"></div>
+            <div class="form-grp"><label>Vekil</label><input id="f-dal-vek" placeholder="Av. Hasan ARSLAN"></div>
+          </div>
+        </div>
+        <div class="ftab-pane" id="ft1">
+          <div class="form-grp"><label>Dava Türü</label>
+            <select id="f-dava-turu">
+              <optgroup label="ALACAK & TAZMİNAT">
+                <option value="sozlesme">Sözleşmeden Doğan Tazminat</option>
+                <option value="haksiz">Haksız Fiil Tazminatı</option>
+                <option value="manevi">Manevi Tazminat</option>
+                <option value="alacak">Alacak Davası</option>
+                <option value="itiraz-iptal">İtirazın İptali (İİK m.67)</option>
+                <option value="menfi">Menfi Tespit (İİK m.72)</option>
+              </optgroup>
+              <optgroup label="TAŞINMAZ">
+                <option value="tapu-iptal">Tapu İptali ve Tescil</option>
+                <option value="zamanasiimi">Kazandırıcı Zamanaşımı</option>
+                <option value="irtifak">İrtifak / Geçit Hakkı</option>
+                <option value="tapu-duz">Tapu Kaydı Düzeltimi</option>
+                <option value="izale">Ortaklığın Giderilmesi</option>
+              </optgroup>
+              <optgroup label="AİLE">
+                <option value="bosanma">Boşanma Davası</option>
+                <option value="nafaka">Nafaka Davası</option>
+                <option value="velayet">Velayet Davası</option>
+              </optgroup>
+              <optgroup label="NÜFUS">
+                <option value="ad-soyad">Ad Soyad Düzeltimi</option>
+                <option value="yas">Yaş Düzeltimi</option>
+                <option value="nesep">Nesep / Soybağı</option>
+              </optgroup>
+              <optgroup label="İŞ">
+                <option value="kidem">Kıdem + İhbar Tazminatı</option>
+                <option value="iade">Feshin Geçersizliği / İşe İade</option>
+              </optgroup>
+              <optgroup label="TİCARET">
+                <option value="marka">Marka / Patent İhlali</option>
+                <option value="sirket">Şirket Feshi</option>
+              </optgroup>
+            </select>
+          </div>
+          <div id="f-ozel-alan"></div>
+          <div class="fg2">
+            <div class="form-grp"><label>Mahkeme Türü</label>
+              <select id="f-mhk-tur">
+                <option value="asliye">Asliye Hukuk (min 45.000 TL)</option>
+                <option value="sulh">Sulh Hukuk (min 30.000 TL)</option>
+                <option value="aile">Aile Mahkemesi (min 35.000 TL)</option>
+                <option value="is">İş Mahkemesi (min 35.000 TL)</option>
+                <option value="ticaret">Ticaret Mahkemesi (min 45.000 TL)</option>
+                <option value="icra">İcra Hukuk (min 9.000 TL)</option>
+              </select>
+            </div>
+            <div class="form-grp"><label>Faiz Başlangıcı</label><input id="f-faiz" type="date"></div>
+          </div>
+          <div class="fg3">
+            <div class="form-grp"><label>Dava Değeri (TL)</label><input id="f-deger" type="number" placeholder="0"></div>
+            <div class="form-grp"><label>Kabul Edilen (TL)</label><input id="f-kabul" type="number" placeholder="0"></div>
+            <div class="form-grp"><label>Reddedilen (TL)</label><input id="f-red" type="number" readonly style="background:#f0f0f0"></div>
+          </div>
+          <div class="form-grp"><label>Bilirkişi Ücreti (TL)</label><input id="f-bilirkisi" type="number" placeholder="0"></div>
+          <div class="fsec">🧮 Hesaplama (2024)</div>
+          <div class="hesap-blk">
+            <div class="hb-r"><span class="hb-l">Nispi Harç (Tam)</span><span class="hb-v" id="h-nispi">—</span></div>
+            <div class="hb-r"><span class="hb-l">Peşin Harç (¼)</span><span class="hb-v" id="h-pesin">—</span></div>
+            <div class="hb-r"><span class="hb-l">Bakiye Harç (¾)</span><span class="hb-v" id="h-bakiye">—</span></div>
+            <div class="hb-r"><span class="hb-l">Kabul Oranı</span><span class="hb-v hb-g" id="h-oran">—</span></div>
+            <div class="hb-r"><span class="hb-l">Vekâlet (Davacı)</span><span class="hb-v hb-g" id="h-vek-d">—</span></div>
+            <div class="hb-r"><span class="hb-l">Vekâlet (Davalı)</span><span class="hb-v hb-r2" id="h-vek-dal">—</span></div>
+            <div class="hb-r"><span class="hb-l">Yargılama Gideri</span><span class="hb-v" id="h-gider">—</span></div>
+          </div>
+          <div id="yargi-yolu-alan"></div>
+        </div>
+        <div class="ftab-pane" id="ft2">
+          <div class="form-grp"><label>Davacı İddia Özeti</label><textarea id="f-iddia" placeholder="Davacı vekili dava dilekçesinde; ..."></textarea></div>
+          <div class="form-grp"><label>Davalı Savunma Özeti</label><textarea id="f-savunma" placeholder="Davalı vekili cevap dilekçesinde; ..."></textarea></div>
+          <div class="form-grp"><label>Delil Değerlendirmesi & Gerekçe</label><textarea id="f-gerekce" placeholder="Mahkememizce yürütülen inceleme sonucunda; ..." style="min-height:90px"></textarea></div>
+          <div class="form-grp"><label>Kanuni Dayanak</label><textarea id="f-kanun" style="min-height:55px"></textarea></div>
+        </div>
+      </div>
+      <div class="hk-preview">
+        <div class="karar-kag" id="karar-kagit">
+          <div class="kk-tc">T.C.</div>
+          <div class="kk-mhk" id="kk-mhk">[ MAHKEME ADI ]</div>
+          <div class="kk-bilgi">
+            <span style="font-weight:700">ESAS NO</span><span id="kk-esas">: …</span>
+            <span style="font-weight:700">KARAR NO</span><span id="kk-kno">: …</span>
+            <span style="font-weight:700">HÂKİM</span><span id="kk-hakim">: …</span>
+            <span style="font-weight:700">KÂTİP</span><span id="kk-katip">: …</span>
+            <span style="font-weight:700">TARİH</span><span id="kk-tarih">: …</span>
+          </div>
+          <hr style="border:none;border-top:1px solid #ccc;margin:11px 0">
+          <div class="kk-bilgi">
+            <span style="font-weight:700">DAVACI</span><span id="kk-dav">: …</span>
+            <span style="font-weight:700">VEKİLİ</span><span id="kk-dav-vek">: …</span>
+            <span style="font-weight:700">DAVALI</span><span id="kk-dal">: …</span>
+            <span style="font-weight:700">VEKİLİ</span><span id="kk-dal-vek">: …</span>
+            <span style="font-weight:700">DAVA</span><span id="kk-dava-ad">: …</span>
+            <span style="font-weight:700">DEĞERİ</span><span id="kk-deger">: …</span>
+          </div>
+          <hr style="border:none;border-top:1px solid #ccc;margin:11px 0">
+          <div class="kk-baslik">TARAFLARIN İDDİA VE SAVUNMALARININ ÖZETİ</div>
+          <p class="kk-metin" id="kk-iddia"><span class="ph">← Gerekçe sekmesinden doldurun</span></p>
+          <p class="kk-metin" id="kk-savunma"></p>
+          <div class="kk-baslik">DELİLLERİN DEĞERLENDİRİLMESİ VE GEREKÇE</div>
+          <p class="kk-metin" id="kk-gerekce"><span class="ph">← Gerekçe sekmesinden doldurun</span></p>
+          <div class="kk-kanun"><strong>📚 Kanuni Dayanak:</strong> <span id="kk-kanun">…</span></div>
+          <div class="hukum-box">
+            <div class="hukum-ttl">H Ü K Ü M</div>
+            <p style="text-align:center;font-size:10px;color:#888;margin-bottom:9px;font-family:sans-serif">Yukarıda açıklanan gerekçe ile;</p>
+            <div id="kk-hukum"><div class="hi ph">← Dava türü ve değer giriniz</div></div>
+          </div>
+          <div class="imza-row">
+            <div class="imza-blk"><div class="imza-cizgi"></div><small>KÂTİP<br><span id="kk-katip-imza">…</span></small></div>
+            <div class="imza-blk"><strong id="kk-tarih-imza">…</strong></div>
+            <div class="imza-blk"><div class="imza-cizgi"></div><small>HÂKİM<br><span id="kk-hakim-imza">…</span></small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KARAR ÖRNEKLERİ -->
+<div class="page" id="page-ornekler">
+  <div class="pg-hd">
+    <span class="pg-ico">📋</span>
+    <div><h1>Karar Örnekleri</h1><p>Hüküm, Taşınmaz, Nüfus, İcra, Tazminat</p></div>
+    <div class="pg-acts"><button class="pg-btn gold" id="btn-orn-yazdir">🖨 Yazdır</button></div>
+  </div>
+  <div style="flex:1;overflow:hidden">
+    <div class="orn-layout" style="height:100%">
+      <div class="orn-liste" id="ornek-liste"></div>
+      <div class="orn-icerik" id="ornek-icerik">
+        <div style="padding:40px;text-align:center;color:var(--muted)">
+          <div style="font-size:44px;margin-bottom:10px">📋</div>
+          <div style="font-size:12px">Soldan bir örnek seçin</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HESAPLAMA -->
+<div class="page" id="page-hesaplama">
+  <div class="pg-hd"><span class="pg-ico">🧮</span><div><h1>Hesaplama Araçları</h1><p>2024 Tarife — Harç, Vekâlet, İnkar, Faiz</p></div></div>
+  <div class="pg-body">
+    <div class="hesap-grid">
+      <div class="hk"><div class="hk-head">⚖️ Yargılama Harcı (2024)</div><div class="hk-body">
+        <div class="form-grp"><label>Dava Değeri (TL)</label><input type="number" id="c-deger" placeholder="250000"></div>
+        <div class="form-grp"><label>Dava Türü</label><select id="c-tur"><option value="nispi">Çekişmeli — Nispi (%6.831)</option><option value="maktu">Maktu (Nüfus/Boşanma)</option><option value="tapu">Tapu Tescil (%4.55)</option><option value="is">İş Mahkemesi (%5.09)</option></select></div>
+        <div class="form-grp"><label>Kabul Oranı (%)</label><input type="number" id="c-oran" value="100" min="0" max="100"></div>
+        <button class="calc-btn" id="btn-calc-harc">🧮 HARÇ HESAPLA</button>
+        <div class="sonuc" id="s-harc">
+          <div class="s-r"><span class="s-l">Tam Nispi Harç</span><span class="s-v" id="sh-nispi">—</span></div>
+          <div class="s-r"><span class="s-l">Peşin Harç (¼)</span><span class="s-v" id="sh-pesin">—</span></div>
+          <div class="s-r"><span class="s-l">Bakiye Harç (¾)</span><span class="s-v" id="sh-bakiye">—</span></div>
+          <div class="s-r"><span class="s-l">Kabul Oranına Göre</span><span class="s-v s-top" id="sh-kabul">—</span></div>
+          <div class="uyari">* 2024 tarife tahminidir.</div>
+        </div>
+      </div></div>
+      <div class="hk"><div class="hk-head">👨‍⚖️ Vekâlet Ücreti (AVK 2024)</div><div class="hk-body">
+        <div class="form-grp"><label>Kabul Edilen (TL)</label><input type="number" id="v-kabul" placeholder="120000"></div>
+        <div class="form-grp"><label>Reddedilen (TL)</label><input type="number" id="v-red" value="0"></div>
+        <div class="form-grp"><label>Mahkeme Türü</label><select id="v-mhk"><option value="asliye">Asliye Hukuk (min 45.000 TL)</option><option value="sulh">Sulh Hukuk (min 30.000 TL)</option><option value="aile">Aile Mahkemesi (min 35.000 TL)</option><option value="is">İş Mahkemesi (min 35.000 TL)</option><option value="ticaret">Ticaret Mah. (min 45.000 TL)</option><option value="icra">İcra Dairesi (min 9.000 TL)</option></select></div>
+        <button class="calc-btn" id="btn-calc-vekalet">🧮 VEKÂLET HESAPLA</button>
+        <div class="sonuc" id="s-vekalet">
+          <div class="s-r"><span class="s-l">Davacı Vekâlet</span><span class="s-v s-top" id="sv-dav">—</span></div>
+          <div class="s-r"><span class="s-l">Davalı Vekâlet</span><span class="s-v" id="sv-dal">—</span></div>
+          <div class="s-r"><span class="s-l">Net Durum</span><span class="s-v" id="sv-net">—</span></div>
+          <div class="uyari">* AVK 2024 asgari tarifesi.</div>
+        </div>
+      </div></div>
+      <div class="hk"><div class="hk-head">💳 İnkar / Kötüniyet Tazminatı (İİK m.67)</div><div class="hk-body">
+        <div class="form-grp"><label>Takip / Alacak Tutarı (TL)</label><input type="number" id="i-takip" placeholder="80000"></div>
+        <div class="form-grp"><label>Tür</label><select id="i-tur"><option value="inkar">İnkar Taz. — %20 (Borçlu aleyhine)</option><option value="kotu">Kötüniyet Taz. — %20 (Alacaklı aleyhine)</option></select></div>
+        <button class="calc-btn" id="btn-calc-inkar">🧮 HESAPLA</button>
+        <div class="sonuc" id="s-inkar">
+          <div class="s-r"><span class="s-l">Takip Tutarı</span><span class="s-v" id="si-tak">—</span></div>
+          <div class="s-r"><span class="s-l">Tazminat (%20)</span><span class="s-v s-top" id="si-taz">—</span></div>
+          <div class="s-r"><span class="s-l">Toplam</span><span class="s-v" id="si-top">—</span></div>
+        </div>
+      </div></div>
+      <div class="hk"><div class="hk-head">📊 Faiz Hesaplama</div><div class="hk-body">
+        <div class="form-grp"><label>Ana Para (TL)</label><input type="number" id="faiz-ana" placeholder="50000"></div>
+        <div class="fg2">
+          <div class="form-grp"><label>Başlangıç</label><input type="date" id="faiz-bas"></div>
+          <div class="form-grp"><label>Bitiş</label><input type="date" id="faiz-bit"></div>
+        </div>
+        <div class="form-grp"><label>Faiz Türü</label><select id="faiz-tur"><option value="yasal">Yasal Faiz (%24 — 2024+)</option><option value="tcmb">TCMB Avans (%36 — 2026)</option><option value="ticari">Ticari Faiz (%36 — 2026)</option></select></div>
+        <button class="calc-btn" id="btn-calc-faiz">🧮 FAİZ HESAPLA</button>
+        <div class="sonuc" id="s-faiz">
+          <div class="s-r"><span class="s-l">Gün Sayısı</span><span class="s-v" id="sf-gun">—</span></div>
+          <div class="s-r"><span class="s-l">Faiz Tutarı</span><span class="s-v s-top" id="sf-faiz">—</span></div>
+          <div class="s-r"><span class="s-l">Ana + Faiz</span><span class="s-v" id="sf-top">—</span></div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ÜST YARGI -->
+<div class="page" id="page-ustyargi">
+  <div class="pg-hd"><span class="pg-ico">📤</span><div><h1>Üst Yargı Yolu Rehberi</h1><p>İstinaf • Temyiz • AYM • AİHM + Süre Hesaplayıcı</p></div></div>
+  <div class="pg-body">
+    <div class="uy-grid">
+      <div class="uy-kart"><div class="uy-head ist">🏛️ İSTİNAF (BAM)</div><div class="uy-body">
+        <div class="uy-r"><div class="uy-l">SÜRE</div><div><strong>2 hafta</strong> — Tebliğden</div></div>
+        <div class="uy-r"><div class="uy-l">SINIR</div><div><strong>28.000 TL</strong> üzeri (2024)</div></div>
+        <div class="uy-r"><div class="uy-l">HARÇ</div><div>Maktu ~3.400 TL</div></div>
+        <div class="uy-r"><div class="uy-l">YÖNTEM</div><div>İlk derece mah. dilekçe</div></div>
+        <div class="uy-r"><div class="uy-l">YASAL</div><div>HMK m.341-360</div></div>
+      </div></div>
+      <div class="uy-kart"><div class="uy-head tem">🔺 TEMYİZ (Yargıtay)</div><div class="uy-body">
+        <div class="uy-r"><div class="uy-l">SÜRE</div><div><strong>2 ay</strong> — BAM kararından</div></div>
+        <div class="uy-r"><div class="uy-l">SINIR</div><div><strong>238.730 TL</strong> üzeri (2024)</div></div>
+        <div class="uy-r"><div class="uy-l">HARÇ</div><div>Nispi (%0.45)</div></div>
+        <div class="uy-r"><div class="uy-l">YÖNTEM</div><div>BAM'a dilekçe</div></div>
+        <div class="uy-r"><div class="uy-l">YASAL</div><div>HMK m.361-374</div></div>
+      </div></div>
+      <div class="uy-kart"><div class="uy-head aym">⚖️ AYM Bireysel Başvuru</div><div class="uy-body">
+        <div class="uy-r"><div class="uy-l">SÜRE</div><div><strong>30 gün</strong> — Nihai karardan</div></div>
+        <div class="uy-r"><div class="uy-l">KOŞUL</div><div>İç yollar tüketilmiş olmalı</div></div>
+        <div class="uy-r"><div class="uy-l">HARÇ</div><div>Yok — Ücretsiz</div></div>
+        <div class="uy-r"><div class="uy-l">YÖNTEM</div><div>AYM — e-Devlet</div></div>
+        <div class="uy-r"><div class="uy-l">YASAL</div><div>Anayasa m.148/3</div></div>
+      </div></div>
+      <div class="uy-kart"><div class="uy-head aihm">🇪🇺 AİHM (Strazburg)</div><div class="uy-body">
+        <div class="uy-r"><div class="uy-l">SÜRE</div><div><strong>4 ay</strong> — Nihai iç karardan</div></div>
+        <div class="uy-r"><div class="uy-l">KOŞUL</div><div>AYM dahil iç yollar tüketilmiş</div></div>
+        <div class="uy-r"><div class="uy-l">HARÇ</div><div>Yok — Ücretsiz</div></div>
+        <div class="uy-r"><div class="uy-l">YÖNTEM</div><div>echr.coe.int online form</div></div>
+      </div></div>
+    </div>
+    <div class="sure-kart">
+      <div class="sure-head">📅 Son Başvuru Tarihi Hesaplayıcı</div>
+      <div class="sure-body">
+        <div class="form-grp"><label>Karar Tebliğ Tarihi</label><input type="date" id="sc-teblig"></div>
+        <div class="form-grp"><label>Yargı Yolu</label><select id="sc-yol"><option value="14">İstinaf (2 hafta)</option><option value="60">Temyiz (2 ay)</option><option value="30">AYM (30 gün)</option><option value="120">AİHM (4 ay)</option></select></div>
+        <div><button class="calc-btn" id="btn-calc-sure">📅 Son Tarihi Hesapla</button></div>
+      </div>
+      <div class="sure-sonuc" id="sc-sonuc"></div>
+    </div>
+  </div>
+</div>
+
+<!-- KAYITLI BELGELER -->
+<div class="page" id="page-kayitli">
+  <div class="pg-hd"><span class="pg-ico">💾</span><div><h1>Kayıtlı Belgeler</h1><p>Oluşturulan dilekçe ve kararlar</p></div>
+    <div class="pg-acts">
+      <button class="pg-btn" id="btn-belge-yenile">🔄 Yenile</button>
+      <button class="pg-btn" id="btn-belge-klasor">📁 Klasörü Aç</button>
+    </div>
+  </div>
+  <div class="pg-body"><div class="belge-grid" id="belge-listesi"></div></div>
+</div>
+
+</div><!-- /content -->
+</div><!-- /app -->
+
+<div id="statusbar">
+  <div class="sb-chip"><div class="dot"></div><span id="sb-aktif">Ana Sayfa</span></div>
+  <div class="sb-chip"><div class="dot"></div><span id="sb-dava-tur">—</span></div>
+  <div class="sb-chip"><div class="dot"></div><span id="sb-hesap">—</span></div>
+  <div class="sb-chip" style="margin-left:auto"><span id="sb-ver">Hukuk Pro v1.0.2 — 2024</span></div>
+</div>
+
+<script src="ios-api.js"></script>
+<script src="app.js"></script>
 <script>
-/* ── UTILS ── */
-function showTab(id) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  const tabs = document.querySelectorAll('.tab');
-  const map = { sablon: 0, yaz: 1, onizleme: 2, bilgi: 3 };
-  tabs[map[id]].classList.add('active');
-  window.scrollTo(0,0);
-}
-
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2500);
-}
-
-function clearForm() {
-  ['kurum','ad','tc','adres','tel','konu','metin','ekler'].forEach(id => {
-    document.getElementById(id).value = '';
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('./sw.js').catch(function () {});
   });
-  document.getElementById('tarih').value = today();
-  toast('Form temizlendi.');
 }
-
-function today() {
-  return new Date().toISOString().split('T')[0];
-}
-
-/* ── TEMPLATES ── */
-const templates = {
-  mahkeme: {
-    kurum: 'İSTANBUL ASLİYE HUKUK MAHKEMESİ SAYIN HAKİMLİĞİNE',
-    konu: 'Hak Talebine İlişkin Dilekçe',
-    metin: `Saygıdeğer Mahkemenize saygıyla arz ederim.
-
-[OLAY VE TALEBİNİZİ BURAYA YAZIN]
-
-Yukarıda açıklanan nedenlerle talebimin kabulüne, yargılama giderlerinin karşı tarafa yükletilmesine karar verilmesini saygılarımla arz ederim.`,
-  },
-  ssk: {
-    kurum: 'SOSYAL GÜVENLİK KURUMU BAŞKANLIĞINA',
-    konu: 'SGK Hizmet Dökümü / Prim Düzeltme Talebi',
-    metin: `Sayın Yetkili,
-
-Sigortalı olarak tabi olduğum SGK kaydımda [açıklayınız] konusunda eksiklik/hata tespit edilmiştir.
-
-Gereğini saygılarımla arz ederim.`,
-  },
-  belediye: {
-    kurum: '…………. BELEDİYE BAŞKANLIĞINA',
-    konu: 'Şikâyet / Talep Bildirimi',
-    metin: `Sayın Başkanlık,
-
-İlçeniz …………. Mahallesi, …………. Sokak'ta bulunan [sorun] hakkında bilginize arz etmek ve gerekli önlemlerin alınmasını talep etmek için başvuruyorum.
-
-Gereğini saygılarımla arz ederim.`,
-  },
-  mudurluk: {
-    kurum: '…………. MÜDÜRLÜĞÜNE',
-    konu: 'Bilgi/Belge Talebi',
-    metin: `Sayın Müdürlük,
-
-[Konunuzu açıklayınız]
-
-Gerekli bilgi ve belgelerin tarafıma iletilmesini saygılarımla arz ederim.`,
-  },
-  isveren: {
-    kurum: '…………. A.Ş. / İŞLETME YÖNETİMİNE',
-    konu: 'Kıdem ve İhbar Tazminatı Talebi',
-    metin: `Sayın Yönetim,
-
-Şirketinizde ………… tarihinden ………… tarihine kadar ………… pozisyonunda çalıştım. İş akdimin [haksız fesih / istifa] nedeniyle sona ermesi üzerine tarafıma ödenmesi gereken kıdem ve ihbar tazminatlarımın yasal faiziyle birlikte ödenmesini talep ediyorum.
-
-Gereğini saygılarımla arz ederim.`,
-  },
-  tapu: {
-    kurum: '…………. TAPU MÜDÜRLÜĞÜNE',
-    konu: 'Tapu Tescil / İptal Talebi',
-    metin: `Sayın Müdürlük,
-
-…………. İli, …………. İlçesi, …………. Mahallesi, …………. pafta, …………. parsel numaralı taşınmaz için [talebinizi açıklayınız].
-
-Gereğini saygılarımla arz ederim.`,
-  },
-  vergi: {
-    kurum: '…………. VERGİ DAİRESİ MÜDÜRLÜĞÜNE',
-    konu: 'Vergi İadesi / Düzeltme Talebi',
-    metin: `Sayın Müdürlük,
-
-Vergi kimlik numaram …………. olan mükellefiyet kaydıma ilişkin [açıklayınız] konusunda düzeltme/iade talebimi saygıyla bildiririm.
-
-Gereğini saygılarımla arz ederim.`,
-  },
-  genel: {
-    kurum: '…………. MAKAMINA',
-    konu: 'Talep Dilekçesi',
-    metin: `Sayın Yetkili,
-
-[Konunuzu buraya açıklayınız]
-
-Gereğini saygılarımla arz ederim.`,
-  },
-};
-
-function loadTemplate(key) {
-  const t = templates[key];
-  document.getElementById('kurum').value  = t.kurum;
-  document.getElementById('konu').value   = t.konu;
-  document.getElementById('metin').value  = t.metin;
-  document.getElementById('tarih').value  = today();
-  showTab('yaz');
-  toast('Şablon yüklendi ✓');
-}
-
-/* ── PREVIEW ── */
-function generatePreview() {
-  const kurum  = document.getElementById('kurum').value.trim()  || '[KURUM]';
-  const ad     = document.getElementById('ad').value.trim()     || '[AD SOYAD]';
-  const tc     = document.getElementById('tc').value.trim()     || '';
-  const adres  = document.getElementById('adres').value.trim()  || '';
-  const tel    = document.getElementById('tel').value.trim()    || '';
-  const konu   = document.getElementById('konu').value.trim()   || '';
-  const metin  = document.getElementById('metin').value.trim()  || '';
-  const ekler  = document.getElementById('ekler').value.trim()  || '';
-  const tarih  = document.getElementById('tarih').value         || today();
-
-  const tarihStr = new Date(tarih + 'T12:00:00').toLocaleDateString('tr-TR', {
-    day: 'numeric', month: 'long', year: 'numeric'
-  });
-
-  let tcSatir  = tc     ? `T.C. Kimlik No : ${tc}\n`    : '';
-  let adresSat = adres  ? `Adres          : ${adres}\n`  : '';
-  let telSat   = tel    ? `Tel            : ${tel}\n`    : '';
-  let konuSat  = konu   ? `\nKONU           : ${konu}\n` : '\n';
-  let eklerBol = ekler  ? `\n\nEKLER:\n${ekler}` : '';
-
-  const preview =
-`                                         ${kurum}
-
-
-
-${konuSat}
-──────────────────────────────────────────────────────
-
-${metin}
-
-
-                                         Saygılarımla,
-                                         ${tarihStr}
-
-                                         ${ad}
-${tcSatir}${adresSat}${telSat}${eklerBol}`;
-
-  document.getElementById('preview-area').textContent = preview;
-  showTab('onizleme');
-  toast('Dilekçe hazır ✓');
-}
-
-/* ── ACTIONS ── */
-function printDoc() {
-  window.print();
-}
-
-function copyText() {
-  const text = document.getElementById('preview-area').textContent;
-  if (!text || text.startsWith('Henüz')) { toast('Önce önizleme oluşturun.'); return; }
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(text).then(() => toast('Kopyalandı ✓'));
-  } else {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    toast('Kopyalandı ✓');
-  }
-}
-
-function shareDoc() {
-  const text = document.getElementById('preview-area').textContent;
-  if (!text || text.startsWith('Henüz')) { toast('Önce önizleme oluşturun.'); return; }
-  if (navigator.share) {
-    navigator.share({ title: 'Dilekçe', text: text })
-      .then(() => toast('Paylaşıldı ✓'))
-      .catch(() => {});
-  } else {
-    copyText();
-    toast('Bağlantı kopyalandı (paylaşım desteklenmiyor).');
-  }
-}
-
-/* ── INIT ── */
-document.getElementById('tarih').value = today();
 </script>
 </body>
 </html>
