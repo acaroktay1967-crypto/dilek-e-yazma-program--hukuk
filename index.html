@@ -8,6 +8,9 @@
   <meta name="apple-mobile-web-app-title" content="Dilekçe Yaz" />
   <link rel="apple-touch-icon" href="icon.png" />
   <title>Dilekçe Yazma Programı</title>
+  <!-- Google Identity Services & Drive API -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://apis.google.com/js/api.js" onload="gapiLoaded()" async defer></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -190,6 +193,33 @@
 
     /* safe area iPhone X+ */
     .section { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+
+    /* ── DRIVE ── */
+    .drive-status {
+      font-size: 13px;
+      color: #636366;
+      margin-bottom: 12px;
+      min-height: 20px;
+    }
+    .drive-status.ok  { color: #34c759; }
+    .drive-status.err { color: #ff3b30; }
+    .drive-file-info {
+      background: #f2f2f7;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 13px;
+      color: #1c1c1e;
+      margin-bottom: 12px;
+      display: none;
+    }
+    .drive-config {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
   </style>
 </head>
 <body>
@@ -205,6 +235,7 @@
   <div class="tab" onclick="showTab('yaz')">Yaz</div>
   <div class="tab" onclick="showTab('onizleme')">Önizleme</div>
   <div class="tab" onclick="showTab('bilgi')">Bilgi</div>
+  <div class="tab" onclick="showTab('drive')">☁️ Drive</div>
 </div>
 
 <!-- ════════════════ ŞABLONLAR ════════════════ -->
@@ -327,6 +358,39 @@
   </div>
 </div>
 
+<!-- ════════════════ DRIVE ════════════════ -->
+<div id="drive" class="section">
+  <div class="card">
+    <h3>☁️ Google Drive'dan Dosya Aç</h3>
+    <p>Google hesabınıza giriş yaparak Drive'daki bir dosyayı doğrudan dilekçe metnine aktarabilirsiniz.</p>
+  </div>
+
+  <div class="drive-config" id="drive-config-warning">
+    ⚙️ <strong>Yapılandırma gerekli:</strong> Aşağıdaki JavaScript bölümünde <code>GOOGLE_CLIENT_ID</code> ve <code>GOOGLE_API_KEY</code> alanlarını doldurun. Bunları Google Cloud Console'dan alabilirsiniz.
+  </div>
+
+  <div class="card">
+    <div class="drive-status" id="drive-status">Henüz giriş yapılmadı.</div>
+    <button class="btn btn-primary" id="btn-drive-signin" onclick="driveSignIn()">🔑 Google ile Giriş Yap</button>
+    <button class="btn btn-outline"  id="btn-drive-signout" onclick="driveSignOut()" style="display:none">🚪 Çıkış Yap</button>
+  </div>
+
+  <div class="card" id="drive-picker-card" style="display:none">
+    <button class="btn btn-success" onclick="openDrivePicker()">📂 Drive'dan Dosya Seç</button>
+    <div class="drive-file-info" id="drive-file-info"></div>
+    <button class="btn btn-warning" id="btn-drive-import" onclick="importDriveFile()" style="display:none">📥 Dilekçe Metnine Aktar</button>
+  </div>
+
+  <div class="card">
+    <h3>📋 Desteklenen Dosya Tipleri</h3>
+    <p>• <b>Google Docs</b> — İçerik düz metin olarak aktarılır.<br/>• <b>.txt</b> — Doğrudan okunur ve aktarılır.</p>
+  </div>
+  <div class="card">
+    <h3>ℹ️ Nasıl Çalışır?</h3>
+    <p>1. "Google ile Giriş Yap" butonuna tıklayın.<br/>2. Drive'dan dosya seçin.<br/>3. "Dilekçe Metnine Aktar" butonuyla metni forma aktarın.<br/>4. "Yaz" sekmesinden düzenleyip önizleme oluşturun.</p>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
@@ -337,7 +401,7 @@ function showTab(id) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   const tabs = document.querySelectorAll('.tab');
-  const map = { sablon: 0, yaz: 1, onizleme: 2, bilgi: 3 };
+  const map = { sablon: 0, yaz: 1, onizleme: 2, bilgi: 3, drive: 4 };
   tabs[map[id]].classList.add('active');
   window.scrollTo(0,0);
 }
@@ -527,6 +591,166 @@ function shareDoc() {
 
 /* ── INIT ── */
 document.getElementById('tarih').value = today();
+
+/* ══════════════════════════════════════════════════════════════
+   GOOGLE DRIVE ENTEGRASYONU
+   ──────────────────────────────────────────────────────────────
+   Google Cloud Console'dan aldığınız değerleri aşağıya girin:
+   https://console.cloud.google.com
+   ══════════════════════════════════════════════════════════════ */
+const GOOGLE_CLIENT_ID  = '';  // ← Buraya Client ID'nizi yapıştırın
+const GOOGLE_API_KEY    = '';  // ← Buraya API Key'inizi yapıştırın
+const GOOGLE_PROJECT_NR = '';  // ← Buraya Cloud proje numaranızı yapıştırın
+
+const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.readonly';
+const PICKER_API  = 'picker';
+
+let driveAccessToken  = null;
+let driveTokenClient  = null;
+let pickerApiLoaded   = false;
+let driveSelectedFile = null; // { id, name, mimeType }
+
+/* Yapılandırma uyarısını göster/gizle */
+(function checkConfig() {
+  if (GOOGLE_CLIENT_ID && GOOGLE_API_KEY) {
+    document.getElementById('drive-config-warning').style.display = 'none';
+  }
+})();
+
+/* gapi yüklendikten sonra Picker API'yi hazırla */
+function gapiLoaded() {
+  gapi.load(PICKER_API, () => { pickerApiLoaded = true; });
+}
+
+/* Google Identity Services ile token al */
+function initTokenClient() {
+  if (!GOOGLE_CLIENT_ID) {
+    setDriveStatus('❌ CLIENT_ID tanımlanmamış. Lütfen kodu düzenleyin.', 'err');
+    return false;
+  }
+  if (!driveTokenClient) {
+    driveTokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: GOOGLE_CLIENT_ID,
+      scope: DRIVE_SCOPE,
+      callback: (resp) => {
+        if (resp.error) {
+          setDriveStatus('❌ Giriş başarısız: ' + resp.error, 'err');
+          return;
+        }
+        driveAccessToken = resp.access_token;
+        onDriveSignedIn();
+      },
+    });
+  }
+  return true;
+}
+
+function driveSignIn() {
+  if (!initTokenClient()) return;
+  if (!GOOGLE_API_KEY) {
+    setDriveStatus('❌ API_KEY tanımlanmamış. Lütfen kodu düzenleyin.', 'err');
+    return;
+  }
+  driveTokenClient.requestAccessToken();
+}
+
+function driveSignOut() {
+  if (driveAccessToken) {
+    google.accounts.oauth2.revoke(driveAccessToken, () => {});
+    driveAccessToken = null;
+  }
+  driveSelectedFile = null;
+  document.getElementById('btn-drive-signin').style.display  = '';
+  document.getElementById('btn-drive-signout').style.display = 'none';
+  document.getElementById('drive-picker-card').style.display = 'none';
+  document.getElementById('btn-drive-import').style.display  = 'none';
+  document.getElementById('drive-file-info').style.display   = 'none';
+  setDriveStatus('Çıkış yapıldı.', '');
+}
+
+function onDriveSignedIn() {
+  document.getElementById('btn-drive-signin').style.display  = 'none';
+  document.getElementById('btn-drive-signout').style.display = '';
+  document.getElementById('drive-picker-card').style.display = '';
+  setDriveStatus('✅ Giriş başarılı! Dosya seçebilirsiniz.', 'ok');
+}
+
+function setDriveStatus(msg, cls) {
+  const el = document.getElementById('drive-status');
+  el.textContent = msg;
+  el.className = 'drive-status' + (cls ? ' ' + cls : '');
+}
+
+function openDrivePicker() {
+  if (!driveAccessToken) { toast('Önce giriş yapın.'); return; }
+  if (!pickerApiLoaded)  { toast('Picker API yükleniyor, lütfen bekleyin...'); return; }
+
+  const view = new google.picker.DocsView()
+    .setMimeTypes('text/plain,application/vnd.google-apps.document')
+    .setIncludeFolders(true);
+
+  const picker = new google.picker.PickerBuilder()
+    .enableFeature(google.picker.Feature.NAV_HIDDEN)
+    .setAppId(GOOGLE_PROJECT_NR)
+    .setOAuthToken(driveAccessToken)
+    .addView(view)
+    .setDeveloperKey(GOOGLE_API_KEY)
+    .setCallback(pickerCallback)
+    .setTitle('Dilekçe için dosya seçin')
+    .build();
+
+  picker.setVisible(true);
+}
+
+function pickerCallback(data) {
+  if (data.action !== google.picker.Action.PICKED) return;
+  const doc = data.docs[0];
+  driveSelectedFile = { id: doc.id, name: doc.name, mimeType: doc.mimeType };
+
+  const info = document.getElementById('drive-file-info');
+  info.textContent = `📄 Seçilen: ${doc.name}`;
+  info.style.display = '';
+  document.getElementById('btn-drive-import').style.display = '';
+  toast('Dosya seçildi: ' + doc.name);
+}
+
+async function importDriveFile() {
+  if (!driveSelectedFile) { toast('Önce bir dosya seçin.'); return; }
+
+  setDriveStatus('⏳ Dosya içeriği alınıyor...', '');
+  try {
+    let content = '';
+    const { id, mimeType } = driveSelectedFile;
+
+    if (mimeType === 'application/vnd.google-apps.document') {
+      // Google Docs → düz metin olarak dışa aktar
+      const res = await fetch(
+        `https://www.googleapis.com/drive/v3/files/${id}/export?mimeType=text%2Fplain`,
+        { headers: { Authorization: 'Bearer ' + driveAccessToken } }
+      );
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      content = await res.text();
+    } else {
+      // .txt → doğrudan indir
+      const res = await fetch(
+        `https://www.googleapis.com/drive/v3/files/${id}?alt=media`,
+        { headers: { Authorization: 'Bearer ' + driveAccessToken } }
+      );
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      content = await res.text();
+    }
+
+    document.getElementById('metin').value = content.trim();
+    setDriveStatus('✅ İçerik aktarıldı!', 'ok');
+    toast('Metin aktarıldı ✓');
+    showTab('yaz');
+  } catch (err) {
+    setDriveStatus('❌ Hata: ' + err.message, 'err');
+    toast('Dosya alınamadı.');
+  }
+}
+
+/* gapi script yüklendikten sonra gapiLoaded() çağrılır (onload="gapiLoaded()") */
 </script>
 </body>
 </html>
