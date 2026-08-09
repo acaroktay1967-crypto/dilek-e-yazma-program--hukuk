@@ -13,6 +13,98 @@ const tarihFmt = s => {
   try { return new Date(s).toLocaleDateString('tr-TR',{day:'2-digit',month:'long',year:'numeric'}); }
   catch { return s; }
 };
+const esc = s => String(s || '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const dosyaAdi = s => String(s || 'belge').toLowerCase()
+  .replace(/[çğıöşü]/g, ch => ({ç:'c',ğ:'g',ı:'i',ö:'o',ş:'s',ü:'u'}[ch]))
+  .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60) || 'belge';
+
+let aktifBelge = { baslik:'Belge', html:'', tip:'belge' };
+
+function belgeSayfasiHTML(baslik, html, toolbar=false) {
+  const araclar = toolbar ? `
+    <div class="print-toolbar">
+      <button onclick="window.print()">PDF / Yazdır</button>
+      <button onclick="const b=new Blob([document.documentElement.outerHTML],{type:'application/msword;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='${dosyaAdi(baslik)}.doc';a.click();">Word</button>
+    </div>` : '';
+  return `<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>${esc(baslik)}</title>
+  <style>
+    body{margin:0;background:#f5f0e0;color:#111;font-family:"Times New Roman",serif}
+    .print-toolbar{position:sticky;top:0;z-index:5;background:#0c1f3f;padding:10px;display:flex;gap:8px;justify-content:flex-end}
+    .print-toolbar button{border:1px solid #c9a84c;background:#c9a84c;color:#0c1f3f;border-radius:4px;padding:8px 12px;font:700 13px sans-serif}
+    .paper{max-width:800px;margin:18px auto;background:#fff;padding:2cm;font-size:13px;line-height:1.9;box-shadow:0 8px 30px rgba(0,0,0,.15)}
+    pre{white-space:pre-wrap;font-family:inherit;font-size:inherit;line-height:inherit}
+    @media print{body{background:#fff}.print-toolbar{display:none}.paper{box-shadow:none;margin:0;padding:0}}
+  </style></head><body>${araclar}<div class="paper">${html}</div></body></html>`;
+}
+
+function belgeModalAc(baslik, html, tip='belge') {
+  aktifBelge = { baslik, html, tip };
+  st('doc-title', baslik);
+  sv('doc-paper', html);
+  const modal = document.getElementById('doc-modal');
+  if (modal) {
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden','false');
+  }
+}
+
+function belgeModalKapat() {
+  const modal = document.getElementById('doc-modal');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden','true');
+  }
+}
+
+function belgePencereAc(baslik=aktifBelge.baslik, html=aktifBelge.html) {
+  if (!html) { toast('Önce bir belge seçin.','hata'); return; }
+  const w = window.open('', '_blank');
+  if (!w) { belgeModalAc(baslik, html); toast('Ayrı pencere engellendi; önizleme açıldı.','bilgi'); return; }
+  w.document.open();
+  w.document.write(belgeSayfasiHTML(baslik, html, true));
+  w.document.close();
+}
+
+function belgeWordIndir(baslik=aktifBelge.baslik, html=aktifBelge.html) {
+  if (!html) { toast('Word için önce bir belge seçin.','hata'); return; }
+  const blob = new Blob([belgeSayfasiHTML(baslik, html, false)], {type:'application/msword;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = dosyaAdi(baslik) + '.doc';
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1500);
+  toast('Word dosyası hazırlandı.','basari');
+}
+
+function belgePdfYazdir(baslik=aktifBelge.baslik, html=aktifBelge.html) {
+  if (!html) { toast('PDF/Yazdır için önce bir belge seçin.','hata'); return; }
+  const w = window.open('', '_blank');
+  if (!w) { toast('Safari açılır pencereyi engelledi. Önce Pencere butonunu deneyin.','hata'); return; }
+  w.document.open();
+  w.document.write(belgeSayfasiHTML(baslik, html, false));
+  w.document.close();
+  setTimeout(()=>w.print(), 350);
+}
+
+function suruklenebilirOnizleme() {
+  const card = document.getElementById('doc-card');
+  const drag = document.getElementById('doc-drag');
+  if (!card || !drag) return;
+  let aktif=false, sx=0, sy=0, ox=0, oy=0;
+  drag.addEventListener('pointerdown', e => {
+    if (e.target.closest('button')) return;
+    aktif = true; sx = e.clientX; sy = e.clientY;
+    const r = card.getBoundingClientRect(); ox = r.left; oy = r.top;
+    card.style.position = 'fixed'; card.style.left = ox + 'px'; card.style.top = oy + 'px'; card.style.margin = '0';
+    drag.setPointerCapture(e.pointerId);
+  });
+  drag.addEventListener('pointermove', e => {
+    if (!aktif) return;
+    card.style.left = Math.max(0, ox + e.clientX - sx) + 'px';
+    card.style.top = Math.max(0, oy + e.clientY - sy) + 'px';
+  });
+  drag.addEventListener('pointerup', e => { aktif = false; try { drag.releasePointerCapture(e.pointerId); } catch {} });
+}
 
 /* ── Toast bildirim ── */
 function toast(msg, tip='bilgi') {
@@ -2792,6 +2884,31 @@ function dilekceKopyala() {
     .then(()=>toast('Metin kopyalandı!','basari'))
     .catch(()=>toast('Kopyalama başarısız.','hata'));
 }
+
+function dilekceBelgeHTML() {
+  const text = gv('dilekce-text');
+  return '<pre>' + esc(text) + '</pre>';
+}
+
+function dilekcePencereAc() {
+  const text = gv('dilekce-text');
+  if (!text.trim()) { toast('Önce bir dilekçe seçin veya yazın.','hata'); return; }
+  const baslik = gv('aktif-sablon') || 'Dilekçe';
+  belgeModalAc(baslik, dilekceBelgeHTML(), 'dilekce');
+}
+
+function dilekceWordIndir() {
+  const text = gv('dilekce-text');
+  if (!text.trim()) { toast('Word için önce bir dilekçe seçin.','hata'); return; }
+  belgeWordIndir(gv('aktif-sablon') || 'Dilekçe', dilekceBelgeHTML());
+}
+
+function dilekcePdfYazdir() {
+  const text = gv('dilekce-text');
+  if (!text.trim()) { toast('PDF/Yazdır için önce bir dilekçe seçin.','hata'); return; }
+  belgePdfYazdir(gv('aktif-sablon') || 'Dilekçe', dilekceBelgeHTML());
+}
+
 async function dilekceKaydet() {
   const text = gv('dilekce-text');
   if (!text.trim()) { toast('Kaydedilecek metin yok.','hata'); return; }
@@ -2810,11 +2927,7 @@ async function dilekceKaydet() {
   }
 }
 function dilekceYazdir() {
-  const text = gv('dilekce-text');
-  if (!text.trim()) { toast('Yazdırılacak metin yok.','hata'); return; }
-  const w = window.open('','','width=900,height=700');
-  w.document.write('<html><head><title>Dilekçe</title><style>body{font-family:"Times New Roman",serif;margin:2cm;font-size:13px;line-height:1.9}</style></head><body><pre style="white-space:pre-wrap;font-family:inherit">'+text+'</pre></body></html>');
-  w.document.close(); setTimeout(()=>w.print(),300);
+  dilekcePdfYazdir();
 }
 
 /* ══════════════════════════════════════════
@@ -3154,6 +3267,8 @@ function kararSifirla() {
 /* ══════════════════════════════════════════
    BÖLÜM 4 — KARAR ÖRNEKLERİ
 ══════════════════════════════════════════ */
+let aktifOrnek = { ad:'Karar Örneği', html:'' };
+
 function ornekListesiOlustur() {
   const liste = document.getElementById('ornek-liste');
   if (!liste) return;
@@ -3175,7 +3290,12 @@ function ornekGoster(ad) {
     if (!ic) return;
     for (const ornekler of Object.values(ORNEKLER)) {
       if (ornekler[ad]) {
-        ic.innerHTML = ornekler[ad]();
+        const html = ornekler[ad]();
+        aktifOrnek = { ad, html };
+        ic.innerHTML = html;
+        if (window.matchMedia && window.matchMedia('(max-width: 900px)').matches) {
+          belgeModalAc(ad, html, 'ornek');
+        }
         return;
       }
     }
@@ -3187,14 +3307,19 @@ function ornekGoster(ad) {
   }
 }
 
+function ornekPencereAc() {
+  if (!aktifOrnek.html) { toast('Önce bir karar örneği seçin.','hata'); return; }
+  belgeModalAc(aktifOrnek.ad, aktifOrnek.html, 'ornek');
+}
+
+function ornekWordIndir() {
+  if (!aktifOrnek.html) { toast('Word için önce bir karar örneği seçin.','hata'); return; }
+  belgeWordIndir(aktifOrnek.ad, aktifOrnek.html);
+}
+
 function ornekYazdir() {
-  const ic = document.getElementById('ornek-icerik');
-  if (!ic || !ic.innerHTML.trim()) { toast('Önce bir örnek seçin.','hata'); return; }
-  const w = window.open('','','width=950,height=800');
-  w.document.write('<!DOCTYPE html><html><head><title>Karar</title><style>body{font-family:"Times New Roman",serif;margin:2cm;font-size:12.5px;line-height:1.9}</style></head><body>');
-  w.document.write(ic.innerHTML);
-  w.document.write('</body></html>');
-  w.document.close(); setTimeout(()=>w.print(),400);
+  if (!aktifOrnek.html) { toast('Önce bir karar örneği seçin.','hata'); return; }
+  belgePdfYazdir(aktifOrnek.ad, aktifOrnek.html);
 }
 
 /* ══════════════════════════════════════════
@@ -3406,6 +3531,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const el = document.getElementById(id);
     if (el) el.addEventListener('click', dilekceYazdir);
   });
+  ['btn-dl-pencere','btn-dl-pencere2'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('click', dilekcePencereAc);
+  });
+  ['btn-dl-word','btn-dl-word2'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('click', dilekceWordIndir);
+  });
   ['btn-dl-kaydet','btn-dl-kaydet2'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.addEventListener('click', dilekceKaydet);
@@ -3461,6 +3594,22 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ── Karar örnekleri ── */
   const btnOrnYazdir = document.getElementById('btn-orn-yazdir');
   if (btnOrnYazdir) btnOrnYazdir.addEventListener('click', ornekYazdir);
+  const btnOrnPencere = document.getElementById('btn-orn-pencere');
+  if (btnOrnPencere) btnOrnPencere.addEventListener('click', ornekPencereAc);
+  const btnOrnWord = document.getElementById('btn-orn-word');
+  if (btnOrnWord) btnOrnWord.addEventListener('click', ornekWordIndir);
+
+  const docClose = document.getElementById('doc-close');
+  if (docClose) docClose.addEventListener('click', belgeModalKapat);
+  const docWord = document.getElementById('doc-word');
+  if (docWord) docWord.addEventListener('click', () => belgeWordIndir());
+  const docPdf = document.getElementById('doc-pdf');
+  if (docPdf) docPdf.addEventListener('click', () => belgePdfYazdir());
+  const docPopup = document.getElementById('doc-popup');
+  if (docPopup) docPopup.addEventListener('click', () => belgePencereAc());
+  const docModal = document.getElementById('doc-modal');
+  if (docModal) docModal.addEventListener('click', e => { if (e.target === docModal) belgeModalKapat(); });
+  suruklenebilirOnizleme();
 
   /* ── Hesaplama butonları ── */
   const hCalcMap = {

@@ -210,6 +210,19 @@ html,body{height:100%;font-family:'Source Sans 3',sans-serif;background:var(--na
 .ol-item:hover{background:#e8f0fe;border-left-color:var(--navy)}
 .ol-item.active{background:var(--navy);color:#fff;font-weight:700;border-left-color:var(--gold)}
 .orn-icerik{overflow-y:auto;background:var(--parch);padding:15px}
+/* BELGE ÖNİZLEME PENCERESİ */
+.doc-modal{position:fixed;inset:0;z-index:10000;display:none;background:rgba(12,31,63,.38);padding:12px}
+.doc-modal.active{display:flex;align-items:center;justify-content:center}
+.doc-card{width:min(920px,96vw);height:min(780px,88dvh);background:#fff;border:1px solid var(--border);border-radius:8px;box-shadow:0 18px 50px rgba(0,0,0,.32);display:flex;flex-direction:column;overflow:hidden}
+.doc-drag{background:var(--navy);color:#fff;display:flex;align-items:center;gap:8px;padding:9px 11px;cursor:move;touch-action:none}
+.doc-drag strong{font-size:12px;color:var(--gold-lt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.doc-drag .spacer{flex:1}
+.doc-action{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;border-radius:4px;padding:5px 8px;font-size:10px;font-weight:800;cursor:pointer}
+.doc-action.gold{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+.doc-action.close{font-size:16px;line-height:1;padding:3px 9px}
+.doc-body{flex:1;overflow:auto;background:var(--parch);padding:16px;-webkit-overflow-scrolling:touch}
+.doc-paper{max-width:790px;margin:0 auto;background:#fff;border:1px solid var(--border);padding:34px 42px;font-family:'Times New Roman',serif;font-size:12.5px;line-height:1.9;white-space:normal}
+.doc-paper pre{white-space:pre-wrap;font-family:inherit;font-size:inherit;line-height:inherit}
 /* KAYITLI */
 .belge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:11px}
 /* TOAST */
@@ -273,6 +286,13 @@ html,body{height:100%;font-family:'Source Sans 3',sans-serif;background:var(--na
   .dl-toolbar{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch}
   .tb-btn{min-width:max-content;padding:6px 10px}
   .dl-info{display:block}
+  .doc-modal{padding:0}
+  .doc-modal.active{align-items:flex-end}
+  .doc-card{width:100vw;height:90dvh;border-radius:12px 12px 0 0}
+  .doc-drag{cursor:grab;flex-wrap:wrap}
+  .doc-drag strong{width:100%;font-size:12px}
+  .doc-action{padding:6px 9px}
+  .doc-paper{padding:22px 16px;font-size:13.5px}
   .fg2,.fg3,.sure-body{grid-template-columns:1fr}
   .karar-kag{padding:20px 16px;font-size:12px;box-shadow:none}
   .kk-bilgi{grid-template-columns:95px 1fr}
@@ -359,6 +379,8 @@ html,body{height:100%;font-family:'Source Sans 3',sans-serif;background:var(--na
     <div class="pg-acts">
       <button class="pg-btn" id="btn-dl-temizle">🗑 Temizle</button>
       <button class="pg-btn" id="btn-dl-kaydet">💾 Kaydet</button>
+      <button class="pg-btn" id="btn-dl-pencere">↗ Pencere</button>
+      <button class="pg-btn" id="btn-dl-word">Word</button>
       <button class="pg-btn gold" id="btn-dl-yazdir">🖨 Yazdır</button>
     </div>
   </div>
@@ -389,6 +411,8 @@ html,body{height:100%;font-family:'Source Sans 3',sans-serif;background:var(--na
         </div>
         <div class="ip-sec">
           <h4>💾 İşlemler</h4>
+          <button class="ip-btn gold" id="btn-dl-pencere2">↗ Ayrı Pencere</button>
+          <button class="ip-btn sec" id="btn-dl-word2">Word İndir</button>
           <button class="ip-btn" id="btn-dl-yazdir2">🖨 Yazdır</button>
           <button class="ip-btn sec" id="btn-dl-kopyala">📋 Kopyala</button>
           <button class="ip-btn sec" id="btn-dl-kaydet2">💾 Kaydet</button>
@@ -572,7 +596,11 @@ html,body{height:100%;font-family:'Source Sans 3',sans-serif;background:var(--na
   <div class="pg-hd">
     <span class="pg-ico">📋</span>
     <div><h1>Karar Örnekleri</h1><p>Hüküm, Taşınmaz, Nüfus, İcra, Tazminat</p></div>
-    <div class="pg-acts"><button class="pg-btn gold" id="btn-orn-yazdir">🖨 Yazdır</button></div>
+    <div class="pg-acts">
+      <button class="pg-btn" id="btn-orn-pencere">↗ Pencere</button>
+      <button class="pg-btn" id="btn-orn-word">Word</button>
+      <button class="pg-btn gold" id="btn-orn-yazdir">PDF / Yazdır</button>
+    </div>
   </div>
   <div style="flex:1;overflow:hidden">
     <div class="orn-layout" style="height:100%">
@@ -703,6 +731,20 @@ html,body{height:100%;font-family:'Source Sans 3',sans-serif;background:var(--na
 
 </div><!-- /content -->
 </div><!-- /app -->
+
+<div class="doc-modal" id="doc-modal" aria-hidden="true">
+  <div class="doc-card" id="doc-card">
+    <div class="doc-drag" id="doc-drag">
+      <strong id="doc-title">Belge Önizleme</strong>
+      <span class="spacer"></span>
+      <button class="doc-action" id="doc-word">Word</button>
+      <button class="doc-action gold" id="doc-pdf">PDF / Yazdır</button>
+      <button class="doc-action" id="doc-popup">↗ Pencere</button>
+      <button class="doc-action close" id="doc-close">×</button>
+    </div>
+    <div class="doc-body"><div class="doc-paper" id="doc-paper"></div></div>
+  </div>
+</div>
 
 <div id="statusbar">
   <div class="sb-chip"><div class="dot"></div><span id="sb-aktif">Ana Sayfa</span></div>
