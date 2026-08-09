@@ -7,6 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Dilekçe Yaz" />
   <link rel="apple-touch-icon" href="icon.png" />
+  <link rel="manifest" href="manifest.json" />
   <title>Dilekçe Yazma Programı</title>
   <!-- Google Identity Services & Drive API -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -751,6 +752,15 @@ async function importDriveFile() {
 }
 
 /* gapi script yüklendikten sonra gapiLoaded() çağrılır (onload="gapiLoaded()") */
+</script>
+<script src="ios-api.js"></script>
+<script src="app.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js');
+    });
+  }
 </script>
 </body>
 </html>
