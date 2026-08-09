@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Dilekçe Yaz" />
+  <link rel="apple-touch-icon" href="icon.png" />
+  <title>Dilekçe Yazma Programı</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f2f2f7;
+      color: #1c1c1e;
+      min-height: 100vh;
+    }
+
+    /* ── NAV BAR ── */
+    .navbar {
+      background: #fff;
+      border-bottom: 1px solid #e5e5ea;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .navbar h1 { font-size: 18px; font-weight: 700; }
+    .navbar .logo { font-size: 22px; }
+
+    /* ── TABS ── */
+    .tabs {
+      display: flex;
+      background: #fff;
+      border-bottom: 1px solid #e5e5ea;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab {
+      flex: 0 0 auto;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      color: #636366;
+      white-space: nowrap;
+    }
+    .tab.active {
+      color: #007aff;
+      border-bottom-color: #007aff;
+    }
+
+    /* ── SECTIONS ── */
+    .section { display: none; padding: 16px; }
+    .section.active { display: block; }
+
+    /* ── CARDS ── */
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08);
+    }
+    .card h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+    .card p  { font-size: 13px; color: #636366; }
+
+    /* ── FORM ── */
+    .form-group { margin-bottom: 14px; }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #636366;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid #d1d1d6;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 16px; /* 16px = iOS zoom engeli */
+      font-family: inherit;
+      background: #fff;
+      color: #1c1c1e;
+      -webkit-appearance: none;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: #007aff;
+    }
+    textarea { min-height: 120px; resize: vertical; }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 13px 20px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      width: 100%;
+      margin-bottom: 10px;
+      transition: opacity .15s;
+    }
+    .btn:active { opacity: .7; }
+    .btn-primary  { background: #007aff; color: #fff; }
+    .btn-success  { background: #34c759; color: #fff; }
+    .btn-warning  { background: #ff9500; color: #fff; }
+    .btn-danger   { background: #ff3b30; color: #fff; }
+    .btn-outline  { background: #fff; color: #007aff; border: 1.5px solid #007aff; }
+
+    /* ── TEMPLATE GRID ── */
+    .template-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .template-btn {
+      background: #fff;
+      border: 1.5px solid #e5e5ea;
+      border-radius: 12px;
+      padding: 14px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+    }
+    .template-btn:active { background: #f2f2f7; }
+    .template-btn .icon { font-size: 28px; margin-bottom: 6px; }
+    .template-btn .name { font-size: 12px; font-weight: 600; color: #1c1c1e; }
+
+    /* ── PREVIEW ── */
+    #preview-area {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      line-height: 1.8;
+      white-space: pre-wrap;
+      min-height: 300px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08);
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      body { background: #fff; }
+      .navbar, .tabs, .btn, .template-grid, label, .form-group { display: none !important; }
+      .section { display: block !important; padding: 0; }
+      #preview-area {
+        box-shadow: none;
+        border-radius: 0;
+        font-size: 12pt;
+        padding: 0;
+      }
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #1c1c1e;
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 999;
+      transition: transform .3s ease;
+      pointer-events: none;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* safe area iPhone X+ */
+    .section { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <span class="logo">⚖️</span>
+  <h1>Dilekçe Yazma Programı</h1>
+  <span style="font-size:20px">📋</span>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('sablon')">Şablonlar</div>
+  <div class="tab" onclick="showTab('yaz')">Yaz</div>
+  <div class="tab" onclick="showTab('onizleme')">Önizleme</div>
+  <div class="tab" onclick="showTab('bilgi')">Bilgi</div>
+</div>
+
+<!-- ════════════════ ŞABLONLAR ════════════════ -->
+<div id="sablon" class="section active">
+  <div class="card">
+    <h3>📋 Hazır Şablonlar</h3>
+    <p>Bir şablon seçin, bilgilerinizi girin.</p>
+  </div>
+  <div class="template-grid">
+    <div class="template-btn" onclick="loadTemplate('mahkeme')">
+      <div class="icon">⚖️</div>
+      <div class="name">Mahkeme Dilekçesi</div>
+    </div>
+    <div class="template-btn" onclick="loadTemplate('ssk')">
+      <div class="icon">🏥</div>
+      <div class="name">SGK / SSK</div>
+    </div>
+    <div class="template-btn" onclick="loadTemplate('belediye')">
+      <div class="icon">🏛️</div>
+      <div class="name">Belediye</div>
+    </div>
+    <div class="template-btn" onclick="loadTemplate('mudurluk')">
+      <div class="icon">🏢</div>
+      <div class="name">Müdürlük</div>
+    </div>
+    <div class="template-btn" onclick="loadTemplate('isveren')">
+      <div class="icon">👔</div>
+      <div class="name">İşveren / Tazminat</div>
+    </div>
+    <div class="template-btn" onclick="loadTemplate('tapu')">
+      <div class="icon">🏠</div>
+      <div class="name">Tapu Müdürlüğü</div>
+    </div>
+    <div class="template-btn" onclick="loadTemplate('vergi')">
+      <div class="icon">📊</div>
+      <div class="name">Vergi Dairesi</div>
+    </div>
+    <div class="template-btn" onclick="loadTemplate('genel')">
+      <div class="icon">📄</div>
+      <div class="name">Genel Dilekçe</div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>💡 İpucu</h3>
+    <p>Şablon seçtikten sonra "Yaz" sekmesinden bilgilerinizi doldurun.</p>
+  </div>
+</div>
+
+<!-- ════════════════ YAZ ════════════════ -->
+<div id="yaz" class="section">
+  <div class="card">
+    <div class="form-group">
+      <label>Kurum / Makam</label>
+      <input id="kurum" type="text" placeholder="örn. İstanbul Asliye Hukuk Mahkemesi" />
+    </div>
+    <div class="form-group">
+      <label>Adınız Soyadınız</label>
+      <input id="ad" type="text" placeholder="Ad Soyad" />
+    </div>
+    <div class="form-group">
+      <label>T.C. Kimlik No</label>
+      <input id="tc" type="tel" maxlength="11" placeholder="11 haneli TC No" />
+    </div>
+    <div class="form-group">
+      <label>Adresiniz</label>
+      <textarea id="adres" rows="2" placeholder="Mahalle, Sokak, No, İlçe/İl"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Telefon</label>
+      <input id="tel" type="tel" placeholder="0xxx xxx xx xx" />
+    </div>
+    <div class="form-group">
+      <label>Konu</label>
+      <input id="konu" type="text" placeholder="Dilekçenizin konusu" />
+    </div>
+    <div class="form-group">
+      <label>Dilekçe Metni</label>
+      <textarea id="metin" rows="8" placeholder="Dilekçenizin içeriğini buraya yazın..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>Ekler (isteğe bağlı)</label>
+      <textarea id="ekler" rows="2" placeholder="1- Kimlik fotokopisi&#10;2- ..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>Tarih</label>
+      <input id="tarih" type="date" />
+    </div>
+  </div>
+
+  <button class="btn btn-primary" onclick="generatePreview()">👁️ Önizleme Oluştur</button>
+  <button class="btn btn-outline" onclick="clearForm()">🗑️ Formu Temizle</button>
+</div>
+
+<!-- ════════════════ ÖNİZLEME ════════════════ -->
+<div id="onizleme" class="section">
+  <div id="preview-area">Henüz dilekçe oluşturulmadı.\n\n"Yaz" sekmesinden bilgilerinizi doldurup "Önizleme Oluştur" butonuna tıklayın.</div>
+  <br/>
+  <button class="btn btn-success" onclick="printDoc()">🖨️ Yazdır / PDF Kaydet</button>
+  <button class="btn btn-warning" onclick="copyText()">📋 Metni Kopyala</button>
+  <button class="btn btn-outline"  onclick="shareDoc()">📤 Paylaş</button>
+</div>
+
+<!-- ════════════════ BİLGİ ════════════════ -->
+<div id="bilgi" class="section">
+  <div class="card">
+    <h3>ℹ️ Dilekçe Nedir?</h3>
+    <p>Dilekçe; bir kişinin bir konuda yetkili makamlara yazılı olarak yaptığı başvurudur. T.C. Anayasası'nın 74. maddesi gereğince herkes dilekçe hakkına sahiptir.</p>
+  </div>
+  <div class="card">
+    <h3>✅ Dilekçede Bulunması Gerekenler</h3>
+    <p>• Başvurulan makam<br/>• Başvuru tarihi<br/>• Ad, soyad, adres ve imza<br/>• Konu ve açıklama<br/>• Talep / istek</p>
+  </div>
+  <div class="card">
+    <h3>📱 iPhone'da PDF Nasıl Kaydedilir?</h3>
+    <p>1. "Yazdır / PDF Kaydet" butonuna dokunun.<br/>2. Açılan menüde sol alta kaydırın.<br/>3. <b>"PDF olarak kaydet"</b> seçeneğini seçin.<br/>4. Kaydetmek istediğiniz yeri seçin.</p>
+  </div>
+  <div class="card">
+    <h3>⚠️ Yasal Uyarı</h3>
+    <p>Bu uygulama genel bilgi amaçlıdır; hukuki tavsiye niteliği taşımaz. Önemli hukuki işlemler için bir avukattan destek alınız.</p>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── UTILS ── */
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const tabs = document.querySelectorAll('.tab');
+  const map = { sablon: 0, yaz: 1, onizleme: 2, bilgi: 3 };
+  tabs[map[id]].classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+function clearForm() {
+  ['kurum','ad','tc','adres','tel','konu','metin','ekler'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('tarih').value = today();
+  toast('Form temizlendi.');
+}
+
+function today() {
+  return new Date().toISOString().split('T')[0];
+}
+
+/* ── TEMPLATES ── */
+const templates = {
+  mahkeme: {
+    kurum: 'İSTANBUL ASLİYE HUKUK MAHKEMESİ SAYIN HAKİMLİĞİNE',
+    konu: 'Hak Talebine İlişkin Dilekçe',
+    metin: `Saygıdeğer Mahkemenize saygıyla arz ederim.
+
+[OLAY VE TALEBİNİZİ BURAYA YAZIN]
+
+Yukarıda açıklanan nedenlerle talebimin kabulüne, yargılama giderlerinin karşı tarafa yükletilmesine karar verilmesini saygılarımla arz ederim.`,
+  },
+  ssk: {
+    kurum: 'SOSYAL GÜVENLİK KURUMU BAŞKANLIĞINA',
+    konu: 'SGK Hizmet Dökümü / Prim Düzeltme Talebi',
+    metin: `Sayın Yetkili,
+
+Sigortalı olarak tabi olduğum SGK kaydımda [açıklayınız] konusunda eksiklik/hata tespit edilmiştir.
+
+Gereğini saygılarımla arz ederim.`,
+  },
+  belediye: {
+    kurum: '…………. BELEDİYE BAŞKANLIĞINA',
+    konu: 'Şikâyet / Talep Bildirimi',
+    metin: `Sayın Başkanlık,
+
+İlçeniz …………. Mahallesi, …………. Sokak'ta bulunan [sorun] hakkında bilginize arz etmek ve gerekli önlemlerin alınmasını talep etmek için başvuruyorum.
+
+Gereğini saygılarımla arz ederim.`,
+  },
+  mudurluk: {
+    kurum: '…………. MÜDÜRLÜĞÜNE',
+    konu: 'Bilgi/Belge Talebi',
+    metin: `Sayın Müdürlük,
+
+[Konunuzu açıklayınız]
+
+Gerekli bilgi ve belgelerin tarafıma iletilmesini saygılarımla arz ederim.`,
+  },
+  isveren: {
+    kurum: '…………. A.Ş. / İŞLETME YÖNETİMİNE',
+    konu: 'Kıdem ve İhbar Tazminatı Talebi',
+    metin: `Sayın Yönetim,
+
+Şirketinizde ………… tarihinden ………… tarihine kadar ………… pozisyonunda çalıştım. İş akdimin [haksız fesih / istifa] nedeniyle sona ermesi üzerine tarafıma ödenmesi gereken kıdem ve ihbar tazminatlarımın yasal faiziyle birlikte ödenmesini talep ediyorum.
+
+Gereğini saygılarımla arz ederim.`,
+  },
+  tapu: {
+    kurum: '…………. TAPU MÜDÜRLÜĞÜNE',
+    konu: 'Tapu Tescil / İptal Talebi',
+    metin: `Sayın Müdürlük,
+
+…………. İli, …………. İlçesi, …………. Mahallesi, …………. pafta, …………. parsel numaralı taşınmaz için [talebinizi açıklayınız].
+
+Gereğini saygılarımla arz ederim.`,
+  },
+  vergi: {
+    kurum: '…………. VERGİ DAİRESİ MÜDÜRLÜĞÜNE',
+    konu: 'Vergi İadesi / Düzeltme Talebi',
+    metin: `Sayın Müdürlük,
+
+Vergi kimlik numaram …………. olan mükellefiyet kaydıma ilişkin [açıklayınız] konusunda düzeltme/iade talebimi saygıyla bildiririm.
+
+Gereğini saygılarımla arz ederim.`,
+  },
+  genel: {
+    kurum: '…………. MAKAMINA',
+    konu: 'Talep Dilekçesi',
+    metin: `Sayın Yetkili,
+
+[Konunuzu buraya açıklayınız]
+
+Gereğini saygılarımla arz ederim.`,
+  },
+};
+
+function loadTemplate(key) {
+  const t = templates[key];
+  document.getElementById('kurum').value  = t.kurum;
+  document.getElementById('konu').value   = t.konu;
+  document.getElementById('metin').value  = t.metin;
+  document.getElementById('tarih').value  = today();
+  showTab('yaz');
+  toast('Şablon yüklendi ✓');
+}
+
+/* ── PREVIEW ── */
+function generatePreview() {
+  const kurum  = document.getElementById('kurum').value.trim()  || '[KURUM]';
+  const ad     = document.getElementById('ad').value.trim()     || '[AD SOYAD]';
+  const tc     = document.getElementById('tc').value.trim()     || '';
+  const adres  = document.getElementById('adres').value.trim()  || '';
+  const tel    = document.getElementById('tel').value.trim()    || '';
+  const konu   = document.getElementById('konu').value.trim()   || '';
+  const metin  = document.getElementById('metin').value.trim()  || '';
+  const ekler  = document.getElementById('ekler').value.trim()  || '';
+  const tarih  = document.getElementById('tarih').value         || today();
+
+  const tarihStr = new Date(tarih + 'T12:00:00').toLocaleDateString('tr-TR', {
+    day: 'numeric', month: 'long', year: 'numeric'
+  });
+
+  let tcSatir  = tc     ? `T.C. Kimlik No : ${tc}\n`    : '';
+  let adresSat = adres  ? `Adres          : ${adres}\n`  : '';
+  let telSat   = tel    ? `Tel            : ${tel}\n`    : '';
+  let konuSat  = konu   ? `\nKONU           : ${konu}\n` : '\n';
+  let eklerBol = ekler  ? `\n\nEKLER:\n${ekler}` : '';
+
+  const preview =
+`                                         ${kurum}
+
+
+
+${konuSat}
+──────────────────────────────────────────────────────
+
+${metin}
+
+
+                                         Saygılarımla,
+                                         ${tarihStr}
+
+                                         ${ad}
+${tcSatir}${adresSat}${telSat}${eklerBol}`;
+
+  document.getElementById('preview-area').textContent = preview;
+  showTab('onizleme');
+  toast('Dilekçe hazır ✓');
+}
+
+/* ── ACTIONS ── */
+function printDoc() {
+  window.print();
+}
+
+function copyText() {
+  const text = document.getElementById('preview-area').textContent;
+  if (!text || text.startsWith('Henüz')) { toast('Önce önizleme oluşturun.'); return; }
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => toast('Kopyalandı ✓'));
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    toast('Kopyalandı ✓');
+  }
+}
+
+function shareDoc() {
+  const text = document.getElementById('preview-area').textContent;
+  if (!text || text.startsWith('Henüz')) { toast('Önce önizleme oluşturun.'); return; }
+  if (navigator.share) {
+    navigator.share({ title: 'Dilekçe', text: text })
+      .then(() => toast('Paylaşıldı ✓'))
+      .catch(() => {});
+  } else {
+    copyText();
+    toast('Bağlantı kopyalandı (paylaşım desteklenmiyor).');
+  }
+}
+
+/* ── INIT ── */
+document.getElementById('tarih').value = today();
+</script>
+</body>
+</html>
