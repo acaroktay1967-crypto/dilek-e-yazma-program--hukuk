@@ -1,0 +1,30 @@
+{
+  "name": "Hukuk Pro",
+  "short_name": "Hukuk Pro",
+  "description": "Profesyonel Hukuk Yazılımı",
+  "start_url": "index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0c1f3f",
+  "theme_color": "#0c1f3f",
+  "icons": [
+    {
+      "src": "resources/icon_192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "resources/icon_256.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "resources/icon_512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
