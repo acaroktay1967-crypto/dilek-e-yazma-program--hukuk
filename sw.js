@@ -1,18 +1,18 @@
-const CACHE_NAME = 'hukuk-pro-iphone-v1';
+const CACHE_NAME = 'hukuk-pro-iphone-v1.0.2-ui';
 const ASSETS = [
   './',
   './index.html',
   './app.js',
   './ios-api.js',
-  './manifest.webmanifest',
-  './resources/icon.png',
-  './resources/icon_128.png',
-  './resources/icon_256.png'
+  './manifest.webmanifest'
 ];
 
 self.addEventListener('install', event => {
-  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)));
-  self.skipWaiting();
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache =>
+      Promise.all(ASSETS.map(url => cache.add(url).catch(() => {})))
+    ).then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener('activate', event => {
