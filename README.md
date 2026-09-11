@@ -1,4 +1,4 @@
-  # ⚖️ Dilekçe Yazma Programı
+   # ⚖️ Dilekçe Yazma Programı
 
 iPhone dahil tüm cihazlarda çalışan, build gerektirmeyen dilekçe hazırlama uygulaması.
 
