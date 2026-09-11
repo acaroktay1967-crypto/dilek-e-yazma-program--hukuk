@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hukuk-pro-iphone-v1.0.2';
+const CACHE_NAME = 'hukuk-pro-iphone-v1.0.2-ios';
 const ASSETS = [
   './',
   './index.html',

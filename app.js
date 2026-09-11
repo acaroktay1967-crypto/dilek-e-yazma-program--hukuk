@@ -680,6 +680,11 @@ function dilekceKaydet() {
 function dilekceKopyala() {
   const metin = $('#dilekce-text').value;
   if (!metin) return toast('Kopyalanacak metin yok', 'hata');
+  const baslik = (App.aktifSablon && App.aktifSablon.a) || 'Dilekçe';
+  if (window.iosAPI && window.iosAPI.iphoneMi() && navigator.share) {
+    window.iosAPI.paylas(baslik, metin);
+    return;
+  }
   navigator.clipboard.writeText(metin)
     .then(() => toast('Kopyalandı', 'basari'))
     .catch(() => toast('Kopyalanamadı', 'hata'));
@@ -688,11 +693,16 @@ function dilekceKopyala() {
 function dilekceYazdir() {
   const metin = $('#dilekce-text').value;
   if (!metin.trim()) return toast('Yazdırılacak metin yok', 'hata');
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Dilekçe</title>
+    <style>body{font-family:'Times New Roman',serif;font-size:13px;line-height:1.9;padding:30px;max-width:800px;margin:auto;white-space:pre-wrap}</style>
+    </head><body>${escHtml(metin)}</body></html>`;
+  if (window.iosAPI && window.iosAPI.yazdir) {
+    window.iosAPI.yazdir(html);
+    return;
+  }
   const w = window.open('', '_blank');
   if (!w) return toast('Açılır pencere engellendi', 'hata');
-  w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Dilekçe</title>
-    <style>body{font-family:'Times New Roman',serif;font-size:13px;line-height:1.9;padding:30px;max-width:800px;margin:auto;white-space:pre-wrap}</style>
-    </head><body>${escHtml(metin)}</body></html>`);
+  w.document.write(html);
   w.document.close();
   setTimeout(() => w.print(), 400);
 }
