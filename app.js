@@ -103,6 +103,9 @@ function sayfaAc(id) {
 
   if (id === 'kayitli') belgeListesiYenile();
   if (id === 'anasayfa') anasayfaYenile();
+
+  const side = $('#sidebar');
+  if (side) side.classList.remove('open');
 }
 
 /* ============================================================
@@ -1511,6 +1514,17 @@ function init() {
   const bk2 = $('#btn-belge-klasor'); if (bk2) bk2.onclick = () => toast('Klasör erişimi tarayıcıda sınırlıdır', 'bilgi');
 
   const kt = $('#f-ktar'); if (kt && !kt.value) kt.value = bugun();
+
+  const menuBtn = $('#menu-btn');
+  if (menuBtn) menuBtn.onclick = () => {
+    const side = $('#sidebar');
+    if (side) side.classList.toggle('open');
+  };
+  const overlay = $('#sidebar-overlay');
+  if (overlay) overlay.onclick = () => {
+    const side = $('#sidebar');
+    if (side) side.classList.remove('open');
+  };
 
   kararOnizlemeGuncelle();
   anasayfaYenile();
