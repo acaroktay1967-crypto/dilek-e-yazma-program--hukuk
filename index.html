@@ -639,6 +639,10 @@
                       <input type="date" class="form-input" id="f-ktar">
                     </div>
                     <div class="form-group">
+                      <label class="form-label">Dava Açılış Tarihi</label>
+                      <input type="date" class="form-input" id="f-dtar">
+                    </div>
+                    <div class="form-group">
                       <label class="form-label">İl</label>
                       <input type="text" class="form-input" id="f-il" placeholder="İstanbul">
                     </div>
@@ -764,7 +768,7 @@
                   <div class="form-group">
                     <label class="form-label">Faiz Türü</label>
                     <select class="form-select" id="f-faiz">
-                      <option value="yasal">Yasal Faiz (%24)</option>
+                      <option value="yasal">Yasal Faiz (%24 → 31.07.2026'dan itibaren %31)</option>
                       <option value="ticari">Ticari Faiz (%36)</option>
                       <option value="banka">En Yüksek Banka Mevduat Faizi</option>
                     </select>
@@ -778,7 +782,7 @@
                       <div>Kabul Oranı: <strong id="h-oran">—</strong></div>
                       <div>Vekâlet (Davacı): <strong id="h-vek-d">—</strong></div>
                       <div>Vekâlet (Davalı): <strong id="h-vek-dal">—</strong></div>
-                      <div style="grid-column:1/-1">Tahmini Gider: <strong id="h-gider">—</strong></div>
+                      <div style="grid-column:1/-1">Tahmini Gider (başvurma + peşin harç + vekâletname + gider avansı + bilirkişi): <strong id="h-gider">—</strong></div>
                     </div>
                   </div>
                   <div id="yargi-yolu-alan"></div>
@@ -929,12 +933,12 @@
               <div class="form-group">
                 <label class="form-label">Mahkeme Türü</label>
                 <select class="form-select" id="v-mhk">
-                  <option value="asliye">Asliye Hukuk (min 45.000)</option>
-                  <option value="sulh">Sulh Hukuk (min 30.000)</option>
-                  <option value="aile">Aile (min 35.000)</option>
-                  <option value="is">İş (min 35.000)</option>
-                  <option value="ticaret">Ticaret (min 45.000)</option>
-                  <option value="icra">İcra Hukuk (min 9.000)</option>
+                  <option value="asliye">Asliye Hukuk (min 62.000)</option>
+                  <option value="sulh">Sulh Hukuk (min 40.000)</option>
+                  <option value="aile">Aile (min 62.000)</option>
+                  <option value="is">İş (min 62.000)</option>
+                  <option value="ticaret">Ticaret (min 62.000)</option>
+                  <option value="icra">İcra (min 12.500)</option>
                 </select>
               </div>
               <button class="btn btn-primary" style="width:100%" id="btn-calc-vekalet" type="button">Hesapla</button>
@@ -978,7 +982,7 @@
               <div class="form-group">
                 <label class="form-label">Faiz Türü</label>
                 <select class="form-select" id="faiz-tur">
-                  <option value="yasal">Yasal Faiz (%24)</option>
+                  <option value="yasal">Yasal Faiz (%24 → 31.07.2026'dan itibaren %31)</option>
                   <option value="tcmb">TCMB Avans (%36)</option>
                   <option value="ticari">Ticari Faiz (%36)</option>
                 </select>

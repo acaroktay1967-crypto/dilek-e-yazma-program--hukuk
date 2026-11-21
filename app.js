@@ -222,6 +222,7 @@ AÇIKLAMALAR :
 3- Müvekkilimizin [çocuk sayısı] adet müşterek çocuğu bulunmaktadır.
 
 HUKUKİ NEDENLER : TMK m.161, 166, 174, 175 ve ilgili mevzuat.
+[NOT — göndermeden önce siliniz: TMK m.175/1'deki "süresiz olarak" ibaresi AYM'nin E.2025/156, K.2026/131 sayılı kararıyla iptal edilmiş olup iptal 30.06.2027'de yürürlüğe girecektir; o tarihe kadar mevcut hüküm uygulanır.]
 DELİLLER : Nüfus kaydı, tanık beyanları, mesaj kayıtları, sosyal inceleme raporu.
 
 SONUÇ VE İSTEM :
@@ -253,6 +254,57 @@ Nafakanın aylık [yeni tutar] TL'ye çıkarılmasına karar verilmesini talep e
 Davacı Vekili
 Av. [Ad Soyad]`},
 
+  { k:'Tazminat', a:'Kısmi Alacak Davası (HMK m.109/4 — Talep Artırımı Saklı)',
+    m:`[  ] ASLİYE HUKUK MAHKEMESİ'NE
+
+DAVACI : [Ad Soyad] — T.C. [  ]
+VEKİLİ : Av. [Ad Soyad]
+DAVALI : [Ad Soyad / Unvan]
+
+KONU   : Alacağın [tutar] TL'lik kısmının tahsili talebimizden ibarettir. Talebin artırılması hakkımız saklıdır.
+
+DEĞER : [tutar] TL (kısmi dava)
+
+AÇIKLAMALAR :
+1- Müvekkilimiz ile davalı arasında [hukuki ilişki] bulunmaktadır.
+2- Müvekkilimizin davalıdan [toplam alacak / miktarı henüz belirlenemeyen alacak] bulunmakta olup, bu davada alacağın yalnızca [tutar] TL'lik KISMI dava edilmektedir.
+3- Dava kısmi dava olarak açılmıştır. HMK m.109/4 uyarınca talep konusu, tahkikatın sona ermesine kadar, bir defaya mahsus olmak üzere ve iddianın genişletilmesi yasağına tabi olmaksızın artırılabilecek; artırılan kısım bakımından zamanaşımı dava tarihinde kesilmiş sayılacaktır. Bu hakkımızı kullanacağımızı beyan ederiz.
+4- Fazlaya ilişkin haklarımız saklıdır.
+[NOT — göndermeden önce siliniz: Belirsiz alacak davası (HMK m.107) 7589 s. K. ile kaldırılmıştır (RG 31.07.2026); kaldırılma tarihinden önce açılmış davalarda eski hüküm uygulanır.]
+
+HUKUKİ NEDENLER : HMK m.109, TBK ve ilgili mevzuat.
+DELİLLER : Sözleşme, belgeler, banka kayıtları, tanık, bilirkişi.
+
+SONUÇ VE İSTEM :
+Alacağın [tutar] TL'lik kısmının [faiz türü] faizi ile birlikte davalıdan tahsiline, fazlaya ilişkin haklarımızın saklı tutulmasına, yargılama giderleri ve vekâlet ücretinin davalıya yükletilmesine karar verilmesini talep ederim. [Tarih]
+
+Davacı Vekili
+Av. [Ad Soyad]`},
+
+  { k:'Tazminat', a:'Kısmi Davada Talep Artırım Dilekçesi (HMK m.109/4)',
+    m:`[  ] ASLİYE HUKUK MAHKEMESİ'NİN [esas] ESAS SAYILI DOSYASINA
+
+DAVACI : [Ad Soyad]
+VEKİLİ : Av. [Ad Soyad]
+DAVALI : [Ad Soyad / Unvan]
+
+KONU   : Kısmi davada talep artırımı beyanımızdan ibarettir.
+
+AÇIKLAMALAR :
+1- Dava, alacağın [ilk talep] TL'lik kısmı için kısmi dava olarak açılmıştır.
+2- Tahkikat sona ermemiştir. HMK m.109/4 uyarınca talep konusu, bir defaya mahsus olmak üzere ve iddianın genişletilmesi yasağına tabi olmaksızın artırılabilir.
+3- Bu hakkımızı işbu dilekçe ile kullanarak talebimizi [yeni toplam tutar] TL'ye ARTIRIYORUZ. Artırım bir defaya mahsustur.
+4- Artırılan kısım bakımından zamanaşımının dava tarihinde kesilmiş sayılacağı tabidir.
+5- Harç tamamlama: artırılan değer üzerinden eksik peşin harç yatırılacaktır.
+
+HUKUKİ NEDENLER : HMK m.109/4 ve ilgili mevzuat.
+
+SONUÇ VE İSTEM :
+Talebimizin [yeni toplam tutar] TL'ye artırıldığının kabulüne, artırılan kısım ile birlikte alacağın tahsiline karar verilmesini saygılarımla talep ederim. [Tarih]
+
+Davacı Vekili
+Av. [Ad Soyad]`},
+
   { k:'Tazminat', a:'Maddi ve Manevi Tazminat Davası',
     m:`[  ] ASLİYE HUKUK MAHKEMESİ'NE
 
@@ -272,6 +324,7 @@ DELİLLER : Kaza tutanağı, hastane kayıtları, bilirkişi, tanık, tanık bey
 
 SONUÇ VE İSTEM :
 [tutar] TL maddi ve [tutar] TL manevi tazminatın olay tarihinden itibaren işleyecek yasal faizi ile birlikte davalıdan alınarak müvekkilimize verilmesine, yargılama giderleri ve vekâlet ücretinin davalıya yükletilmesine karar verilmesini talep ederim. [Tarih]
+[NOT — göndermeden önce siliniz: Olay 31.07.2026 veya sonrasında gerçekleşmişse ve çalışma gücü kaybı tazminatı isteniyorsa TBK m.55 (7589 s. K.) uyarınca faiz, kazancın bilindiği dönem için olay tarihinden, bilinemeyen dönem için karar tarihinden işler; tahkikata kadar ifa amacıyla yapılan ödemeler oransal mahsup edilir. Önceki olaylarda eski hüküm uygulanır.]
 
 Davacı Vekili
 Av. [Ad Soyad]`},
@@ -291,6 +344,7 @@ AÇIKLAMALAR :
 3- Müvekkilimiz, desteğini yitirmesi nedeniyle maddi zarara uğramıştır.
 
 HUKUKİ NEDENLER : TBK m.53, 55 ve ilgili mevzuat.
+[NOT — göndermeden önce siliniz: Olay 31.07.2026 veya sonrasında gerçekleşmişse TBK m.55 (7589 s. K.) gereği faiz, kazancın bilindiği dönem tazminatına olay tarihinden, bilinemeyen döneme karar tarihinden işler; tahkikata kadar ifa amacıyla yapılan ödemeler oransal mahsup edilir. Önceki olaylarda eski hüküm uygulanır.]
 DELİLLER : Veraset ilamı, nüfus kayıtları, gelir belgeleri, bilirkişi.
 
 SONUÇ VE İSTEM :
@@ -391,6 +445,55 @@ Dava konusu taşınmazın tapu kaydının İPTALİ ile müvekkilimiz adına TESC
 
 Davacı Vekili
 Av. [Ad Soyad]`},
+
+  { k:'Taşınmaz', a:'Önalım (Şufa) Davası — Paylı Mülkiyet',
+    m:`[  ] ASLİYE HUKUK MAHKEMESİ'NE
+
+DAVACI : [Ad Soyad] — T.C. [  ]
+VEKİLİ : Av. [Ad Soyad]
+DAVALI : [Alıcı Ad Soyad] — T.C. [  ]
+İLGİLİ : [Satıcı Ad Soyad]
+
+KONU   : [İl/İlçe] [ada/parsel] sayılı taşınmazdaki payın satışına ilişkin önalım hakkının kullanılması ve payın müvekkil adına tescili talebimizden ibarettir.
+
+AÇIKLAMALAR :
+1- Müvekkilimiz, dava konusu taşınmazda [pay oranı] oranında paydaştır.
+2- [Satıcı], payını [satış tarihi] tarihinde davalıya satmıştır. Satış müvekkilimize [bildirim tarihi / bildirilmemiştir] tarihinde öğrenilmiş/bildirilmiştir.
+3- Önalım hakkı, satışın bildirildiği tarihten itibaren üç ay ve her hâlde satıştan itibaren bir yıl (satış 25.12.2025 öncesinde yapılmışsa iki yıl) içinde kullanılmıştır; süre hak düşürücüdür.
+4- Dava konusu payın rayiç bedeli ile alıcıya düşen tapu giderleri, hâkimin vereceği kesin süre içinde nakden yatırılacaktır (TMK m.734/2 — güncel metni ve AYM'nin E.2026/23, K.2026/162 sayılı iptal kararının etkisini kontrol ediniz).
+
+HUKUKİ NEDENLER : TMK m.732, 733, 734, Geçici Madde 1 (7571 s. K.) ve ilgili mevzuat.
+DELİLLER : Tapu kaydı, satış akit tablosu, tebligat/bildirim belgeleri, keşif ve bilirkişi.
+
+SONUÇ VE İSTEM :
+Önalım hakkının kullanılmasına, davalı adına kayıtlı payın tapu kaydının İPTALİ ile müvekkilimiz adına TESCİLİNE, yargılama giderleri ve vekâlet ücretinin davalıya yükletilmesine karar verilmesini talep ederim. [Tarih]
+
+Davacı Vekili
+Av. [Ad Soyad]`},
+
+  { k:'Aile Hukuku', a:'Vesayet Altındaki Kişiye Ait Malın Satışı İzni (UYAP E-Satış)',
+    m:`[  ] SULH HUKUK MAHKEMESİ'NE (VESAYET MAKAMI)
+
+TALEP EDEN : [Vasi Ad Soyad] — T.C. [  ]
+VESAYET ALTINDAKİ : [Ad Soyad] — T.C. [  ]
+
+KONU   : Vesayet altındaki kişiye ait [taşınır / taşınmaz] malın UYAP elektronik satış portalı üzerinden açık artırmayla satışına izin verilmesi talebimizden ibarettir.
+
+AÇIKLAMALAR :
+1- [Esas] sayılı dosya ile [Ad Soyad] hakkında vesayet kurulmuş, tarafımız vasi atanmıştır.
+2- Vesayet altındaki kişiye ait [mal/taşınmaz — ada/parsel] [satış gerekçesi: bakım/tedavi gideri, borç, ekonomik yarar] nedeniyle satılması gerekmektedir.
+3- Satışın, yürürlük tarihinden (31.10.2026) sonra ilanı yapılacak satışlarda UYAP'a entegre elektronik satış portalında açık artırmayla yapılması talep olunur (TMK m.440, 444).
+4- İhalenin vesayet makamının onayıyla tamamlanacağı; onay kararının ihale gününden itibaren 10 gün içinde verilmesi gerektiği bilinmektedir.
+5- [Varsa: Denetim makamı izniyle pazarlıkla satış gerekçesi.]
+
+HUKUKİ NEDENLER : TMK m.440, 444, 462 ve ilgili mevzuat (7589 s. K.).
+DELİLLER : Vesayet kararı, tapu kaydı, değerleme/bilirkişi raporu, gider belgeleri.
+
+SONUÇ VE İSTEM :
+Vesayet altındaki kişiye ait malın UYAP elektronik satış portalında açık artırmayla satışı için gerekli iznin verilmesine karar verilmesini saygılarımla talep ederim. [Tarih]
+
+Vasi
+[Ad Soyad]`},
 
   { k:'Taşınmaz', a:'Ortaklığın Giderilmesi (İzale-i Şuyu)',
     m:`[  ] SULH HUKUK MAHKEMESİ'NE
@@ -783,11 +886,68 @@ function hukumUret(davaTuru, deger, kabul) {
   }
 }
 
-function yargiYoluBilgi(davaTuru, deger, kabul) {
+/* 2026 mevzuat sabitleri: 31.12.2025 Harçlar K. Genel Tebliği (Seri No: 98), 2026 parasal sınırlar (%25,49 yeniden değerleme),
+   03.11.2026 tarihli AAÜT 2026-2027. Yıllık/dönemlik güncelleme için yalnızca bu blok değiştirilmelidir. */
+const MEVZUAT = {
+  yil: 2026,
+  harc: { nispi: 0.06831, asgari: 732, basvurma: 732, vekaletSuret: 104,
+          istinafBasvurma: 1124.5, istinaf: 2002, temyizBasvurma: 1124.5, temyiz: 3608.5 },
+  // HMK Gider Avansı Tarifesi (RG 28.10.2025/33061): taraf sayısının 5 katı tebligat ücreti + 530 TL. PTT normal tebligat: 265 TL (04.02.2026).
+  gider: { avansSabit: 530, tebligat: 265, tebligatKati: 5 },
+  // 3095 s. K. m.1 (7589 s. K. m.10, RG 31.07.2026): %80 x 31.12.2025 reeskont oranı (%38,75) = %31; ikinci yarıyıl ara güncellemesi (30 Haziran farkı >= 5 puan) olursa güncelleyin
+  yasalFaiz: { eski: 0.24, yeni: 0.31, gecisTarihi: '2026-07-31' },
+  // HMK m.341/2 ve m.362/1-a (Adalet Bak. HİGM tablosu). AYM E.2023/182 K.2024/203 sonrası sınır, davanın AÇILDIĞI yıla göredir.
+  parasalSinirlar: {
+    2020:{ istinaf:5390, temyiz:72070 },   2021:{ istinaf:5880, temyiz:78630 },
+    2022:{ istinaf:8000, temyiz:107090 },  2023:{ istinaf:17830, temyiz:238730 },
+    2024:{ istinaf:28250, temyiz:378290 }, 2025:{ istinaf:40000, temyiz:544000 },
+    2026:{ istinaf:50000, temyiz:682000 }
+  },
+  aaut: {
+    maktu: { asliye:62000, sulh:40000, aile:62000, is:62000, ticaret:62000, icra:12500 },
+    dilimler: [[800000,.16],[800000,.15],[1600000,.14],[1600000,.13],[2400000,.11],[3200000,.08],[4000000,.05],[4800000,.03],[5600000,.02],[Infinity,.01]]
+  }
+};
+
+function aautNispi(tutar) {
+  let kalan = tutar, ucret = 0;
+  for (const [dilim, oran] of MEVZUAT.aaut.dilimler) {
+    const k = Math.min(kalan, dilim);
+    if (k <= 0) break;
+    ucret += k * oran; kalan -= k;
+  }
+  return ucret;
+}
+
+function aautUcret(tutar, mhk) {
+  const min = MEVZUAT.aaut.maktu[mhk] || MEVZUAT.aaut.maktu.asliye;
+  return tutar > 0 ? Math.max(aautNispi(tutar), min) : min;
+}
+
+function giderAvansi(tarafSayisi = 2) {
+  const g = MEVZUAT.gider;
+  return g.avansSabit + g.tebligatKati * tarafSayisi * g.tebligat;
+}
+
+function harcHesapla(deger) {
+  const h = MEVZUAT.harc;
+  const nispi = Math.max(deger * h.nispi, h.asgari);
+  return { nispi, pesin: Math.max(nispi / 4, h.asgari) };
+}
+
+function parasalSinir(yil) {
+  const t = MEVZUAT.parasalSinirlar;
+  const y = Math.min(Math.max(yil || MEVZUAT.yil, 2020), MEVZUAT.yil);
+  return Object.assign({ yil: y }, t[y]);
+}
+
+function yargiYoluBilgi(davaTuru, deger, kabul, davaYili) {
   const v = kabul > 0 ? kabul : deger;
-  if (v < 28000) return { yol:'KESİN', mesaj:'Karar KESİN — İstinaf yolu kapalı.', sinif:'yp-t' };
-  if (v < 238730) return { yol:'İSTİNAF', mesaj:`İSTİNAF yolu açık (BAM). Süre: 2 hafta.`, sinif:'yp-k' };
-  return { yol:'İSTİNAF + TEMYİZ', mesaj:`İSTİNAF + TEMYİZ açık (Yargıtay).`, sinif:'yp-i' };
+  const p = parasalSinir(davaYili);
+  const not = ` (${p.yil} sınırları: istinaf ${tlFormat(p.istinaf)}, temyiz ${tlFormat(p.temyiz)}; dava açılış yılına göre)`;
+  if (v <= p.istinaf) return { yol:'KESİN', mesaj:'Karar KESİN — İstinaf yolu kapalı.' + not, sinif:'yp-t' };
+  if (v <= p.temyiz) return { yol:'İSTİNAF', mesaj:'İSTİNAF yolu açık (BAM). Süre: 2 hafta. BAM yeniden esas hakkında karar verirse, kabul/ret edilen kısım istinaf sınırını aşıyorsa temyiz açıktır (HMK m.362/1-a, 7589 s. K.).' + not, sinif:'yp-k' };
+  return { yol:'İSTİNAF + TEMYİZ', mesaj:'İSTİNAF + TEMYİZ açık (Yargıtay).' + not, sinif:'yp-i' };
 }
 
 function kararOnizlemeGuncelle() {
@@ -828,7 +988,7 @@ function kararOnizlemeGuncelle() {
 
   const yy = $('#yargi-yolu-alan');
   if (yy && davaTuru && deger > 0) {
-    const b = yargiYoluBilgi(davaTuru, deger, kabul);
+    const b = yargiYoluBilgi(davaTuru, deger, kabul, parseInt(((get('f-dtar') || get('f-ktar')) || '').slice(0, 4), 10));
     yy.innerHTML = `<div class="yp ${b.sinif}">${escHtml(b.mesaj)}</div>`;
   } else if (yy) {
     yy.innerHTML = '';
@@ -843,20 +1003,15 @@ function hesaplaKararHarc() {
   const mhkTur = $('#f-mhk-tur') ? $('#f-mhk-tur').value : 'asliye';
   const bilirkisi = sayiDegeri($('#f-bilirkisi'));
 
-  const oranlar = {
-    asliye:{ nispi:0.06831, maktu:45000 }, sulh:{ nispi:0.06831, maktu:30000 },
-    aile:{ nispi:0.06831, maktu:35000 }, is:{ nispi:0.0509, maktu:35000 },
-    ticaret:{ nispi:0.06831, maktu:45000 }, icra:{ nispi:0.06831, maktu:9000 }
-  };
-  const mh = oranlar[mhkTur] || oranlar.asliye;
-  const nispi = deger * mh.nispi;
-  const pesin = nispi / 4;
-  const bakiye = nispi - pesin;
+  const hc = harcHesapla(deger);
+  const nispi = deger > 0 ? hc.nispi : 0;
+  const pesin = deger > 0 ? hc.pesin : 0;
+  const bakiye = Math.max(nispi - pesin, 0);
   const oran = deger > 0 ? ((kabul / deger) * 100) : 0;
 
-  const vekalet = kabul > 0 ? Math.max(kabul * 0.16, mh.maktu) : mh.maktu;
-  const vekaletD = Math.max((deger - kabul) * 0.16, mh.maktu);
-  const gider = pesin + bilirkisi + 500;
+  const vekalet = aautUcret(kabul, mhkTur);
+  const vekaletD = aautUcret(Math.max(deger - kabul, 0), mhkTur);
+  const gider = MEVZUAT.harc.basvurma + pesin + MEVZUAT.harc.vekaletSuret + giderAvansi() + bilirkisi;
 
   const set = (id, val) => { const e = $('#' + id); if (e) e.textContent = val; };
   set('h-nispi', tlFormat(nispi));
@@ -936,12 +1091,11 @@ function hesaplaHarc() {
   const oran = parseFloat(($('#c-oran') && $('#c-oran').value) || 100) / 100;
 
   let nispi = 0;
-  if (tur === 'nispi' || tur === 'maktu') nispi = deger * 0.06831;
-  else if (tur === 'tapu') nispi = deger * 0.0455;
-  else if (tur === 'is') nispi = deger * 0.0509;
+  if (tur === 'tapu') nispi = deger * 0.0455;
+  else nispi = harcHesapla(deger).nispi;
 
-  if (tur === 'maktu') nispi = 269.85;
-  const pesin = nispi / 4;
+  if (tur === 'maktu') nispi = MEVZUAT.harc.asgari;
+  const pesin = tur === 'tapu' ? nispi / 4 : Math.max(nispi / 4, MEVZUAT.harc.asgari);
   const bakiye = nispi - pesin;
 
   const a = $('#sh-nispi'); if (a) a.textContent = tlFormat(nispi);
@@ -956,13 +1110,8 @@ function hesaplaVekalet() {
   const kabul = sayiDegeri($('#v-kabul'));
   const red = sayiDegeri($('#v-red'));
   const mhk = $('#v-mhk') ? $('#v-mhk').value : 'asliye';
-  const minimumlar = {
-    asliye:45000, sulh:30000, aile:35000, is:35000, ticaret:45000, icra:9000
-  };
-  const min = minimumlar[mhk] || 45000;
-
-  const vDav = Math.max(kabul * 0.16, min);
-  const vDal = Math.max(red * 0.16, min);
+  const vDav = aautUcret(kabul, mhk);
+  const vDal = aautUcret(red, mhk);
   const net = vDav - vDal;
 
   const a = $('#sv-dav'); if (a) a.textContent = tlFormat(vDav);
@@ -995,8 +1144,16 @@ function hesaplaFaiz() {
 
   const gun = Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
   const oranlar = { yasal:0.24, tcmb:0.36, ticari:0.36 };
-  const oran = oranlar[tur] || 0.24;
-  const faiz = ana * oran * gun / 365;
+  let faiz;
+  if (tur === 'yasal') {
+    // 7589 s. K. m.10 (3095 s. K. m.1): 31.07.2026'dan itibaren yasal faiz = önceki yıl 31 Aralık reeskont oranının %80'i; dönemlere bölünerek hesaplanır
+    const gecis = new Date(MEVZUAT.yasalFaiz.gecisTarihi);
+    const g1 = Math.max(0, Math.min(d2, gecis) - d1) / 864e5;
+    const g2 = Math.max(0, d2 - Math.max(d1, gecis)) / 864e5;
+    faiz = ana * (MEVZUAT.yasalFaiz.eski * g1 + MEVZUAT.yasalFaiz.yeni * g2) / 365;
+  } else {
+    faiz = ana * (oranlar[tur] || 0.24) * gun / 365;
+  }
 
   const a = $('#sf-gun'); if (a) a.textContent = gun + ' gün';
   const b = $('#sf-faiz'); if (b) b.textContent = tlFormat(faiz);
@@ -1485,7 +1642,7 @@ function init() {
     };
   });
 
-  const formIds = ['f-mhk','f-il','f-esas','f-kno','f-ktar','f-hakim','f-sicil','f-katip',
+  const formIds = ['f-mhk','f-il','f-esas','f-kno','f-ktar','f-dtar','f-hakim','f-sicil','f-katip',
     'f-dav-ad','f-dav-tc','f-dav-vek','f-dal-ad','f-dal-tc','f-dal-vek',
     'f-dava-turu','f-mhk-tur','f-faiz','f-deger','f-kabul','f-bilirkisi',
     'f-iddia','f-savunma','f-gerekce','f-kanun'];
