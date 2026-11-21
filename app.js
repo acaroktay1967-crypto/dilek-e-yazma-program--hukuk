@@ -324,6 +324,7 @@ DELİLLER : Kaza tutanağı, hastane kayıtları, bilirkişi, tanık, tanık bey
 
 SONUÇ VE İSTEM :
 [tutar] TL maddi ve [tutar] TL manevi tazminatın olay tarihinden itibaren işleyecek yasal faizi ile birlikte davalıdan alınarak müvekkilimize verilmesine, yargılama giderleri ve vekâlet ücretinin davalıya yükletilmesine karar verilmesini talep ederim. [Tarih]
+[NOT — göndermeden önce siliniz: Olay 31.07.2026 veya sonrasında gerçekleşmişse ve çalışma gücü kaybı tazminatı isteniyorsa TBK m.55 (7589 s. K.) uyarınca faiz, kazancın bilindiği dönem için olay tarihinden, bilinemeyen dönem için karar tarihinden işler; tahkikata kadar ifa amacıyla yapılan ödemeler oransal mahsup edilir. Önceki olaylarda eski hüküm uygulanır.]
 
 Davacı Vekili
 Av. [Ad Soyad]`},
@@ -343,6 +344,7 @@ AÇIKLAMALAR :
 3- Müvekkilimiz, desteğini yitirmesi nedeniyle maddi zarara uğramıştır.
 
 HUKUKİ NEDENLER : TBK m.53, 55 ve ilgili mevzuat.
+[NOT — göndermeden önce siliniz: Olay 31.07.2026 veya sonrasında gerçekleşmişse TBK m.55 (7589 s. K.) gereği faiz, kazancın bilindiği dönem tazminatına olay tarihinden, bilinemeyen döneme karar tarihinden işler; tahkikata kadar ifa amacıyla yapılan ödemeler oransal mahsup edilir. Önceki olaylarda eski hüküm uygulanır.]
 DELİLLER : Veraset ilamı, nüfus kayıtları, gelir belgeleri, bilirkişi.
 
 SONUÇ VE İSTEM :
@@ -892,6 +894,8 @@ const MEVZUAT = {
           istinafBasvurma: 1124.5, istinaf: 2002, temyizBasvurma: 1124.5, temyiz: 3608.5 },
   // HMK Gider Avansı Tarifesi (RG 28.10.2025/33061): taraf sayısının 5 katı tebligat ücreti + 530 TL. PTT normal tebligat: 265 TL (04.02.2026).
   gider: { avansSabit: 530, tebligat: 265, tebligatKati: 5 },
+  // 3095 s. K. m.1 (7589 s. K. m.10, RG 31.07.2026): %80 x 31.12.2025 reeskont oranı (%38,75) = %31; ikinci yarıyıl ara güncellemesi (30 Haziran farkı >= 5 puan) olursa güncelleyin
+  yasalFaiz: { eski: 0.24, yeni: 0.31, gecisTarihi: '2026-07-31' },
   // HMK m.341/2 ve m.362/1-a (Adalet Bak. HİGM tablosu). AYM E.2023/182 K.2024/203 sonrası sınır, davanın AÇILDIĞI yıla göredir.
   parasalSinirlar: {
     2020:{ istinaf:5390, temyiz:72070 },   2021:{ istinaf:5880, temyiz:78630 },
@@ -1140,8 +1144,16 @@ function hesaplaFaiz() {
 
   const gun = Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
   const oranlar = { yasal:0.24, tcmb:0.36, ticari:0.36 };
-  const oran = oranlar[tur] || 0.24;
-  const faiz = ana * oran * gun / 365;
+  let faiz;
+  if (tur === 'yasal') {
+    // 7589 s. K. m.10 (3095 s. K. m.1): 31.07.2026'dan itibaren yasal faiz = önceki yıl 31 Aralık reeskont oranının %80'i; dönemlere bölünerek hesaplanır
+    const gecis = new Date(MEVZUAT.yasalFaiz.gecisTarihi);
+    const g1 = Math.max(0, Math.min(d2, gecis) - d1) / 864e5;
+    const g2 = Math.max(0, d2 - Math.max(d1, gecis)) / 864e5;
+    faiz = ana * (MEVZUAT.yasalFaiz.eski * g1 + MEVZUAT.yasalFaiz.yeni * g2) / 365;
+  } else {
+    faiz = ana * (oranlar[tur] || 0.24) * gun / 365;
+  }
 
   const a = $('#sf-gun'); if (a) a.textContent = gun + ' gün';
   const b = $('#sf-faiz'); if (b) b.textContent = tlFormat(faiz);
