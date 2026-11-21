@@ -254,6 +254,57 @@ Nafakanın aylık [yeni tutar] TL'ye çıkarılmasına karar verilmesini talep e
 Davacı Vekili
 Av. [Ad Soyad]`},
 
+  { k:'Tazminat', a:'Kısmi Alacak Davası (HMK m.109/4 — Talep Artırımı Saklı)',
+    m:`[  ] ASLİYE HUKUK MAHKEMESİ'NE
+
+DAVACI : [Ad Soyad] — T.C. [  ]
+VEKİLİ : Av. [Ad Soyad]
+DAVALI : [Ad Soyad / Unvan]
+
+KONU   : Alacağın [tutar] TL'lik kısmının tahsili talebimizden ibarettir. Talebin artırılması hakkımız saklıdır.
+
+DEĞER : [tutar] TL (kısmi dava)
+
+AÇIKLAMALAR :
+1- Müvekkilimiz ile davalı arasında [hukuki ilişki] bulunmaktadır.
+2- Müvekkilimizin davalıdan [toplam alacak / miktarı henüz belirlenemeyen alacak] bulunmakta olup, bu davada alacağın yalnızca [tutar] TL'lik KISMI dava edilmektedir.
+3- Dava kısmi dava olarak açılmıştır. HMK m.109/4 uyarınca talep konusu, tahkikatın sona ermesine kadar, bir defaya mahsus olmak üzere ve iddianın genişletilmesi yasağına tabi olmaksızın artırılabilecek; artırılan kısım bakımından zamanaşımı dava tarihinde kesilmiş sayılacaktır. Bu hakkımızı kullanacağımızı beyan ederiz.
+4- Fazlaya ilişkin haklarımız saklıdır.
+[NOT — göndermeden önce siliniz: Belirsiz alacak davası (HMK m.107) 7589 s. K. ile kaldırılmıştır (RG 31.07.2026); kaldırılma tarihinden önce açılmış davalarda eski hüküm uygulanır.]
+
+HUKUKİ NEDENLER : HMK m.109, TBK ve ilgili mevzuat.
+DELİLLER : Sözleşme, belgeler, banka kayıtları, tanık, bilirkişi.
+
+SONUÇ VE İSTEM :
+Alacağın [tutar] TL'lik kısmının [faiz türü] faizi ile birlikte davalıdan tahsiline, fazlaya ilişkin haklarımızın saklı tutulmasına, yargılama giderleri ve vekâlet ücretinin davalıya yükletilmesine karar verilmesini talep ederim. [Tarih]
+
+Davacı Vekili
+Av. [Ad Soyad]`},
+
+  { k:'Tazminat', a:'Kısmi Davada Talep Artırım Dilekçesi (HMK m.109/4)',
+    m:`[  ] ASLİYE HUKUK MAHKEMESİ'NİN [esas] ESAS SAYILI DOSYASINA
+
+DAVACI : [Ad Soyad]
+VEKİLİ : Av. [Ad Soyad]
+DAVALI : [Ad Soyad / Unvan]
+
+KONU   : Kısmi davada talep artırımı beyanımızdan ibarettir.
+
+AÇIKLAMALAR :
+1- Dava, alacağın [ilk talep] TL'lik kısmı için kısmi dava olarak açılmıştır.
+2- Tahkikat sona ermemiştir. HMK m.109/4 uyarınca talep konusu, bir defaya mahsus olmak üzere ve iddianın genişletilmesi yasağına tabi olmaksızın artırılabilir.
+3- Bu hakkımızı işbu dilekçe ile kullanarak talebimizi [yeni toplam tutar] TL'ye ARTIRIYORUZ. Artırım bir defaya mahsustur.
+4- Artırılan kısım bakımından zamanaşımının dava tarihinde kesilmiş sayılacağı tabidir.
+5- Harç tamamlama: artırılan değer üzerinden eksik peşin harç yatırılacaktır.
+
+HUKUKİ NEDENLER : HMK m.109/4 ve ilgili mevzuat.
+
+SONUÇ VE İSTEM :
+Talebimizin [yeni toplam tutar] TL'ye artırıldığının kabulüne, artırılan kısım ile birlikte alacağın tahsiline karar verilmesini saygılarımla talep ederim. [Tarih]
+
+Davacı Vekili
+Av. [Ad Soyad]`},
+
   { k:'Tazminat', a:'Maddi ve Manevi Tazminat Davası',
     m:`[  ] ASLİYE HUKUK MAHKEMESİ'NE
 
