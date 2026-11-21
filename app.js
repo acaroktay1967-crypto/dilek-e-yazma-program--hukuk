@@ -783,10 +783,45 @@ function hukumUret(davaTuru, deger, kabul) {
   }
 }
 
+/* 2026 mevzuat sabitleri: 31.12.2025 Harçlar K. Genel Tebliği (Seri No: 98), 2026 parasal sınırlar (%25,49 yeniden değerleme),
+   03.11.2026 tarihli AAÜT 2026-2027. Yıllık/dönemlik güncelleme için yalnızca bu blok değiştirilmelidir. */
+const MEVZUAT = {
+  yil: 2026,
+  harc: { nispi: 0.06831, asgari: 732, basvurma: 732, vekaletSuret: 104,
+          istinafBasvurma: 1124.5, istinaf: 2002, temyizBasvurma: 1124.5, temyiz: 3608.5 },
+  istinafSiniri: 50000,
+  temyizSiniri: 682000,
+  aaut: {
+    maktu: { asliye:62000, sulh:40000, aile:62000, is:62000, ticaret:62000, icra:12500 },
+    dilimler: [[800000,.16],[800000,.15],[1600000,.14],[1600000,.13],[2400000,.11],[3200000,.08],[4000000,.05],[4800000,.03],[5600000,.02],[Infinity,.01]]
+  }
+};
+
+function aautNispi(tutar) {
+  let kalan = tutar, ucret = 0;
+  for (const [dilim, oran] of MEVZUAT.aaut.dilimler) {
+    const k = Math.min(kalan, dilim);
+    if (k <= 0) break;
+    ucret += k * oran; kalan -= k;
+  }
+  return ucret;
+}
+
+function aautUcret(tutar, mhk) {
+  const min = MEVZUAT.aaut.maktu[mhk] || MEVZUAT.aaut.maktu.asliye;
+  return tutar > 0 ? Math.max(aautNispi(tutar), min) : min;
+}
+
+function harcHesapla(deger) {
+  const h = MEVZUAT.harc;
+  const nispi = Math.max(deger * h.nispi, h.asgari);
+  return { nispi, pesin: Math.max(nispi / 4, h.asgari) };
+}
+
 function yargiYoluBilgi(davaTuru, deger, kabul) {
   const v = kabul > 0 ? kabul : deger;
-  if (v < 28000) return { yol:'KESİN', mesaj:'Karar KESİN — İstinaf yolu kapalı.', sinif:'yp-t' };
-  if (v < 238730) return { yol:'İSTİNAF', mesaj:`İSTİNAF yolu açık (BAM). Süre: 2 hafta.`, sinif:'yp-k' };
+  if (v <= MEVZUAT.istinafSiniri) return { yol:'KESİN', mesaj:'Karar KESİN — İstinaf yolu kapalı.', sinif:'yp-t' };
+  if (v <= MEVZUAT.temyizSiniri) return { yol:'İSTİNAF', mesaj:`İSTİNAF yolu açık (BAM). Süre: 2 hafta.`, sinif:'yp-k' };
   return { yol:'İSTİNAF + TEMYİZ', mesaj:`İSTİNAF + TEMYİZ açık (Yargıtay).`, sinif:'yp-i' };
 }
 
@@ -843,20 +878,15 @@ function hesaplaKararHarc() {
   const mhkTur = $('#f-mhk-tur') ? $('#f-mhk-tur').value : 'asliye';
   const bilirkisi = sayiDegeri($('#f-bilirkisi'));
 
-  const oranlar = {
-    asliye:{ nispi:0.06831, maktu:45000 }, sulh:{ nispi:0.06831, maktu:30000 },
-    aile:{ nispi:0.06831, maktu:35000 }, is:{ nispi:0.0509, maktu:35000 },
-    ticaret:{ nispi:0.06831, maktu:45000 }, icra:{ nispi:0.06831, maktu:9000 }
-  };
-  const mh = oranlar[mhkTur] || oranlar.asliye;
-  const nispi = deger * mh.nispi;
-  const pesin = nispi / 4;
-  const bakiye = nispi - pesin;
+  const hc = harcHesapla(deger);
+  const nispi = deger > 0 ? hc.nispi : 0;
+  const pesin = deger > 0 ? hc.pesin : 0;
+  const bakiye = Math.max(nispi - pesin, 0);
   const oran = deger > 0 ? ((kabul / deger) * 100) : 0;
 
-  const vekalet = kabul > 0 ? Math.max(kabul * 0.16, mh.maktu) : mh.maktu;
-  const vekaletD = Math.max((deger - kabul) * 0.16, mh.maktu);
-  const gider = pesin + bilirkisi + 500;
+  const vekalet = aautUcret(kabul, mhkTur);
+  const vekaletD = aautUcret(Math.max(deger - kabul, 0), mhkTur);
+  const gider = MEVZUAT.harc.basvurma + pesin + MEVZUAT.harc.vekaletSuret + bilirkisi + 500;
 
   const set = (id, val) => { const e = $('#' + id); if (e) e.textContent = val; };
   set('h-nispi', tlFormat(nispi));
@@ -936,12 +966,11 @@ function hesaplaHarc() {
   const oran = parseFloat(($('#c-oran') && $('#c-oran').value) || 100) / 100;
 
   let nispi = 0;
-  if (tur === 'nispi' || tur === 'maktu') nispi = deger * 0.06831;
-  else if (tur === 'tapu') nispi = deger * 0.0455;
-  else if (tur === 'is') nispi = deger * 0.0509;
+  if (tur === 'tapu') nispi = deger * 0.0455;
+  else nispi = harcHesapla(deger).nispi;
 
-  if (tur === 'maktu') nispi = 269.85;
-  const pesin = nispi / 4;
+  if (tur === 'maktu') nispi = MEVZUAT.harc.asgari;
+  const pesin = tur === 'tapu' ? nispi / 4 : Math.max(nispi / 4, MEVZUAT.harc.asgari);
   const bakiye = nispi - pesin;
 
   const a = $('#sh-nispi'); if (a) a.textContent = tlFormat(nispi);
@@ -956,13 +985,8 @@ function hesaplaVekalet() {
   const kabul = sayiDegeri($('#v-kabul'));
   const red = sayiDegeri($('#v-red'));
   const mhk = $('#v-mhk') ? $('#v-mhk').value : 'asliye';
-  const minimumlar = {
-    asliye:45000, sulh:30000, aile:35000, is:35000, ticaret:45000, icra:9000
-  };
-  const min = minimumlar[mhk] || 45000;
-
-  const vDav = Math.max(kabul * 0.16, min);
-  const vDal = Math.max(red * 0.16, min);
+  const vDav = aautUcret(kabul, mhk);
+  const vDal = aautUcret(red, mhk);
   const net = vDav - vDal;
 
   const a = $('#sv-dav'); if (a) a.textContent = tlFormat(vDav);
