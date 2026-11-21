@@ -222,6 +222,7 @@ AÇIKLAMALAR :
 3- Müvekkilimizin [çocuk sayısı] adet müşterek çocuğu bulunmaktadır.
 
 HUKUKİ NEDENLER : TMK m.161, 166, 174, 175 ve ilgili mevzuat.
+[NOT — göndermeden önce siliniz: TMK m.175/1'deki "süresiz olarak" ibaresi AYM'nin E.2025/156, K.2026/131 sayılı kararıyla iptal edilmiş olup iptal 30.06.2027'de yürürlüğe girecektir; o tarihe kadar mevcut hüküm uygulanır.]
 DELİLLER : Nüfus kaydı, tanık beyanları, mesaj kayıtları, sosyal inceleme raporu.
 
 SONUÇ VE İSTEM :
@@ -391,6 +392,55 @@ Dava konusu taşınmazın tapu kaydının İPTALİ ile müvekkilimiz adına TESC
 
 Davacı Vekili
 Av. [Ad Soyad]`},
+
+  { k:'Taşınmaz', a:'Önalım (Şufa) Davası — Paylı Mülkiyet',
+    m:`[  ] ASLİYE HUKUK MAHKEMESİ'NE
+
+DAVACI : [Ad Soyad] — T.C. [  ]
+VEKİLİ : Av. [Ad Soyad]
+DAVALI : [Alıcı Ad Soyad] — T.C. [  ]
+İLGİLİ : [Satıcı Ad Soyad]
+
+KONU   : [İl/İlçe] [ada/parsel] sayılı taşınmazdaki payın satışına ilişkin önalım hakkının kullanılması ve payın müvekkil adına tescili talebimizden ibarettir.
+
+AÇIKLAMALAR :
+1- Müvekkilimiz, dava konusu taşınmazda [pay oranı] oranında paydaştır.
+2- [Satıcı], payını [satış tarihi] tarihinde davalıya satmıştır. Satış müvekkilimize [bildirim tarihi / bildirilmemiştir] tarihinde öğrenilmiş/bildirilmiştir.
+3- Önalım hakkı, satışın bildirildiği tarihten itibaren üç ay ve her hâlde satıştan itibaren bir yıl (satış 25.12.2025 öncesinde yapılmışsa iki yıl) içinde kullanılmıştır; süre hak düşürücüdür.
+4- Dava konusu payın rayiç bedeli ile alıcıya düşen tapu giderleri, hâkimin vereceği kesin süre içinde nakden yatırılacaktır (TMK m.734/2 — güncel metni ve AYM'nin E.2026/23, K.2026/162 sayılı iptal kararının etkisini kontrol ediniz).
+
+HUKUKİ NEDENLER : TMK m.732, 733, 734, Geçici Madde 1 (7571 s. K.) ve ilgili mevzuat.
+DELİLLER : Tapu kaydı, satış akit tablosu, tebligat/bildirim belgeleri, keşif ve bilirkişi.
+
+SONUÇ VE İSTEM :
+Önalım hakkının kullanılmasına, davalı adına kayıtlı payın tapu kaydının İPTALİ ile müvekkilimiz adına TESCİLİNE, yargılama giderleri ve vekâlet ücretinin davalıya yükletilmesine karar verilmesini talep ederim. [Tarih]
+
+Davacı Vekili
+Av. [Ad Soyad]`},
+
+  { k:'Aile Hukuku', a:'Vesayet Altındaki Kişiye Ait Malın Satışı İzni (UYAP E-Satış)',
+    m:`[  ] SULH HUKUK MAHKEMESİ'NE (VESAYET MAKAMI)
+
+TALEP EDEN : [Vasi Ad Soyad] — T.C. [  ]
+VESAYET ALTINDAKİ : [Ad Soyad] — T.C. [  ]
+
+KONU   : Vesayet altındaki kişiye ait [taşınır / taşınmaz] malın UYAP elektronik satış portalı üzerinden açık artırmayla satışına izin verilmesi talebimizden ibarettir.
+
+AÇIKLAMALAR :
+1- [Esas] sayılı dosya ile [Ad Soyad] hakkında vesayet kurulmuş, tarafımız vasi atanmıştır.
+2- Vesayet altındaki kişiye ait [mal/taşınmaz — ada/parsel] [satış gerekçesi: bakım/tedavi gideri, borç, ekonomik yarar] nedeniyle satılması gerekmektedir.
+3- Satışın, yürürlük tarihinden (31.10.2026) sonra ilanı yapılacak satışlarda UYAP'a entegre elektronik satış portalında açık artırmayla yapılması talep olunur (TMK m.440, 444).
+4- İhalenin vesayet makamının onayıyla tamamlanacağı; onay kararının ihale gününden itibaren 10 gün içinde verilmesi gerektiği bilinmektedir.
+5- [Varsa: Denetim makamı izniyle pazarlıkla satış gerekçesi.]
+
+HUKUKİ NEDENLER : TMK m.440, 444, 462 ve ilgili mevzuat (7589 s. K.).
+DELİLLER : Vesayet kararı, tapu kaydı, değerleme/bilirkişi raporu, gider belgeleri.
+
+SONUÇ VE İSTEM :
+Vesayet altındaki kişiye ait malın UYAP elektronik satış portalında açık artırmayla satışı için gerekli iznin verilmesine karar verilmesini saygılarımla talep ederim. [Tarih]
+
+Vasi
+[Ad Soyad]`},
 
   { k:'Taşınmaz', a:'Ortaklığın Giderilmesi (İzale-i Şuyu)',
     m:`[  ] SULH HUKUK MAHKEMESİ'NE
