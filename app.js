@@ -789,8 +789,13 @@ const MEVZUAT = {
   yil: 2026,
   harc: { nispi: 0.06831, asgari: 732, basvurma: 732, vekaletSuret: 104,
           istinafBasvurma: 1124.5, istinaf: 2002, temyizBasvurma: 1124.5, temyiz: 3608.5 },
-  istinafSiniri: 50000,
-  temyizSiniri: 682000,
+  // HMK m.341/2 ve m.362/1-a (Adalet Bak. HİGM tablosu). AYM E.2023/182 K.2024/203 sonrası sınır, davanın AÇILDIĞI yıla göredir.
+  parasalSinirlar: {
+    2020:{ istinaf:5390, temyiz:72070 },   2021:{ istinaf:5880, temyiz:78630 },
+    2022:{ istinaf:8000, temyiz:107090 },  2023:{ istinaf:17830, temyiz:238730 },
+    2024:{ istinaf:28250, temyiz:378290 }, 2025:{ istinaf:40000, temyiz:544000 },
+    2026:{ istinaf:50000, temyiz:682000 }
+  },
   aaut: {
     maktu: { asliye:62000, sulh:40000, aile:62000, is:62000, ticaret:62000, icra:12500 },
     dilimler: [[800000,.16],[800000,.15],[1600000,.14],[1600000,.13],[2400000,.11],[3200000,.08],[4000000,.05],[4800000,.03],[5600000,.02],[Infinity,.01]]
@@ -818,11 +823,19 @@ function harcHesapla(deger) {
   return { nispi, pesin: Math.max(nispi / 4, h.asgari) };
 }
 
-function yargiYoluBilgi(davaTuru, deger, kabul) {
+function parasalSinir(yil) {
+  const t = MEVZUAT.parasalSinirlar;
+  const y = Math.min(Math.max(yil || MEVZUAT.yil, 2020), MEVZUAT.yil);
+  return Object.assign({ yil: y }, t[y]);
+}
+
+function yargiYoluBilgi(davaTuru, deger, kabul, davaYili) {
   const v = kabul > 0 ? kabul : deger;
-  if (v <= MEVZUAT.istinafSiniri) return { yol:'KESİN', mesaj:'Karar KESİN — İstinaf yolu kapalı.', sinif:'yp-t' };
-  if (v <= MEVZUAT.temyizSiniri) return { yol:'İSTİNAF', mesaj:`İSTİNAF yolu açık (BAM). Süre: 2 hafta.`, sinif:'yp-k' };
-  return { yol:'İSTİNAF + TEMYİZ', mesaj:`İSTİNAF + TEMYİZ açık (Yargıtay).`, sinif:'yp-i' };
+  const p = parasalSinir(davaYili);
+  const not = ` (${p.yil} sınırları: istinaf ${tlFormat(p.istinaf)}, temyiz ${tlFormat(p.temyiz)}; dava açılış yılına göre)`;
+  if (v <= p.istinaf) return { yol:'KESİN', mesaj:'Karar KESİN — İstinaf yolu kapalı.' + not, sinif:'yp-t' };
+  if (v <= p.temyiz) return { yol:'İSTİNAF', mesaj:'İSTİNAF yolu açık (BAM). Süre: 2 hafta. BAM yeniden esas hakkında karar verirse, kabul/ret edilen kısım istinaf sınırını aşıyorsa temyiz açıktır (HMK m.362/1-a, 7589 s. K.).' + not, sinif:'yp-k' };
+  return { yol:'İSTİNAF + TEMYİZ', mesaj:'İSTİNAF + TEMYİZ açık (Yargıtay).' + not, sinif:'yp-i' };
 }
 
 function kararOnizlemeGuncelle() {
@@ -863,7 +876,7 @@ function kararOnizlemeGuncelle() {
 
   const yy = $('#yargi-yolu-alan');
   if (yy && davaTuru && deger > 0) {
-    const b = yargiYoluBilgi(davaTuru, deger, kabul);
+    const b = yargiYoluBilgi(davaTuru, deger, kabul, parseInt(((get('f-dtar') || get('f-ktar')) || '').slice(0, 4), 10));
     yy.innerHTML = `<div class="yp ${b.sinif}">${escHtml(b.mesaj)}</div>`;
   } else if (yy) {
     yy.innerHTML = '';
@@ -1509,7 +1522,7 @@ function init() {
     };
   });
 
-  const formIds = ['f-mhk','f-il','f-esas','f-kno','f-ktar','f-hakim','f-sicil','f-katip',
+  const formIds = ['f-mhk','f-il','f-esas','f-kno','f-ktar','f-dtar','f-hakim','f-sicil','f-katip',
     'f-dav-ad','f-dav-tc','f-dav-vek','f-dal-ad','f-dal-tc','f-dal-vek',
     'f-dava-turu','f-mhk-tur','f-faiz','f-deger','f-kabul','f-bilirkisi',
     'f-iddia','f-savunma','f-gerekce','f-kanun'];
