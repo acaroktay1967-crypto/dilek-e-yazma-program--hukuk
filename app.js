@@ -789,6 +789,8 @@ const MEVZUAT = {
   yil: 2026,
   harc: { nispi: 0.06831, asgari: 732, basvurma: 732, vekaletSuret: 104,
           istinafBasvurma: 1124.5, istinaf: 2002, temyizBasvurma: 1124.5, temyiz: 3608.5 },
+  // HMK Gider Avansı Tarifesi (RG 28.10.2025/33061): taraf sayısının 5 katı tebligat ücreti + 530 TL. PTT normal tebligat: 265 TL (04.02.2026).
+  gider: { avansSabit: 530, tebligat: 265, tebligatKati: 5 },
   // HMK m.341/2 ve m.362/1-a (Adalet Bak. HİGM tablosu). AYM E.2023/182 K.2024/203 sonrası sınır, davanın AÇILDIĞI yıla göredir.
   parasalSinirlar: {
     2020:{ istinaf:5390, temyiz:72070 },   2021:{ istinaf:5880, temyiz:78630 },
@@ -815,6 +817,11 @@ function aautNispi(tutar) {
 function aautUcret(tutar, mhk) {
   const min = MEVZUAT.aaut.maktu[mhk] || MEVZUAT.aaut.maktu.asliye;
   return tutar > 0 ? Math.max(aautNispi(tutar), min) : min;
+}
+
+function giderAvansi(tarafSayisi = 2) {
+  const g = MEVZUAT.gider;
+  return g.avansSabit + g.tebligatKati * tarafSayisi * g.tebligat;
 }
 
 function harcHesapla(deger) {
@@ -899,7 +906,7 @@ function hesaplaKararHarc() {
 
   const vekalet = aautUcret(kabul, mhkTur);
   const vekaletD = aautUcret(Math.max(deger - kabul, 0), mhkTur);
-  const gider = MEVZUAT.harc.basvurma + pesin + MEVZUAT.harc.vekaletSuret + bilirkisi + 500;
+  const gider = MEVZUAT.harc.basvurma + pesin + MEVZUAT.harc.vekaletSuret + giderAvansi() + bilirkisi;
 
   const set = (id, val) => { const e = $('#' + id); if (e) e.textContent = val; };
   set('h-nispi', tlFormat(nispi));
